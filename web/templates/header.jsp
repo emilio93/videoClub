@@ -9,13 +9,12 @@ String prestamos = pagina.equals("prestamos.jsp")? "active": "";
 String rCliente = clientes.equals("")? "clientes": "#";
 String rPelicula = peliculas.equals("")? "peliculas": "#";
 String rPrestamo = prestamos.equals("")? "prestamos": "#";
-
 %>
 <header>
     <h1><b>Video Club</b></h1>
 </header>
 <ul class="nav nav-tabs">
-  <li role="presentation" class="<%=clientes%>>"<a href="<%=rCliente%>">Clientes</a></li>
+  <li role="presentation" class="<%=clientes%>"><a href="<%=rCliente%>">Clientes</a></li>
   <li role="presentation" class="<%=peliculas%>"><a href="<%=rPelicula%>">Películas</a></li>
   <li role="presentation" class="<%=prestamos%>"><a href="<%=rPrestamo%>">Préstamos</a></li>
 </ul>

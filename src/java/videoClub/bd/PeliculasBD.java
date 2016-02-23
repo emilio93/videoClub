@@ -1,8 +1,10 @@
 package videoClub.bd;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import videoClub.log.Log;
+import java.util.logging.Level;
 import videoClub.sistema.Pelicula;
 
 /**
@@ -39,7 +41,34 @@ public class PeliculasBD extends Consultor{
         return lp;
     }
 
-    Pelicula leer(int aInt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean agregar(Pelicula pelicula) {
+        boolean exito = false;
+        try {
+            PreparedStatement stmt = preparar(
+                "call addPelicula(?, ?, ?, ?, ?, ?, ?, ?)",
+                pelicula.getTitulo(),
+                pelicula.getDireccion(),
+                pelicula.getProduccion(),
+                pelicula.getAno(),
+                pelicula.getGenero(),
+                pelicula.getDuracion(),
+                pelicula.getSinopsis(),
+                pelicula.getCantidad()
+            );
+            exito = stmt.executeUpdate() == 1;
+            log.log(
+                    Level.INFO,
+                    "Agregando película a la base de datos: {0}",
+                    Boolean.toString(exito));
+            close();
+        } catch (Exception e) {
+            log.warning(setError("No se logró agregar la película a la base de datos."));
+            log.info(e.getMessage());
+        }
+        return exito;
+    }
+
+    Pelicula obtener(int aInt) {
+        return null;
     }
 }

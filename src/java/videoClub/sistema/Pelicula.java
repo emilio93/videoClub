@@ -6,13 +6,13 @@ package videoClub.sistema;
  */
 public class Pelicula {
     
-    private int id;
+    private int idPelicula;
     private String titulo;
-    private String dirección;
-    private String producción;
-    private int año;
+    private String direccion;
+    private String produccion;
+    private int ano;
     private String genero;
-    private int duración; // En minutos.
+    private int duracion; // En minutos.
     private String sinopsis;
     private int cantidad; // De ejemplares.
 
@@ -20,30 +20,30 @@ public class Pelicula {
     
     public Pelicula(
             String titulo, 
-            String dirección, 
-            String producción, 
-            int año, 
+            String direccion, 
+            String produccion, 
+            int ano, 
             String genero, 
             int duración, 
             String sinopsis, 
             int cantidad
     ) {
         this.titulo = titulo;
-        this.dirección = dirección;
-        this.producción = producción;
-        this.año = año;
+        this.direccion = direccion;
+        this.produccion = produccion;
+        this.ano = ano;
         this.genero = genero;
-        this.duración = duración;
+        this.duracion = duracion;
         this.sinopsis = sinopsis;
         this.cantidad = cantidad;
     }
 
-    public int getId() {
-        return id;
+    public int getIdPelicula() {
+        return idPelicula;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdPelicula(int idPelicula) {
+        this.idPelicula = idPelicula;
     }
 
     public String getTitulo() {
@@ -54,28 +54,28 @@ public class Pelicula {
         this.titulo = titulo;
     }
 
-    public String getDirección() {
-        return dirección;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setDirección(String dirección) {
-        this.dirección = dirección;
+    public void setDireccion(String dirección) {
+        this.direccion = dirección;
     }
 
-    public String getProducción() {
-        return producción;
+    public String getProduccion() {
+        return produccion;
     }
 
-    public void setProducción(String producción) {
-        this.producción = producción;
+    public void setProduccion(String produccion) {
+        this.produccion = produccion;
     }
 
-    public int getAño() {
-        return año;
+    public int getAno() {
+        return ano;
     }
 
-    public void setAño(int año) {
-        this.año = año;
+    public void setAno(int ano) {
+        this.ano = ano;
     }
 
     public String getGenero() {
@@ -86,12 +86,12 @@ public class Pelicula {
         this.genero = genero;
     }
 
-    public int getDuración() {
-        return duración;
+    public int getDuracion() {
+        return duracion;
     }
 
-    public void setDuración(int duración) {
-        this.duración = duración;
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
     }
 
     public String getSinopsis() {

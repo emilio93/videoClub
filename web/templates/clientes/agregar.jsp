@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div>
     <h2>
-        <span style="cursor:hand;" id="activador-agregar">
+        <span style="cursor: pointer;" id="activador-agregar">
             <i id="chev-agregar" class="fa fa-chevron-circle-right"></i>
             Agregar Nuevo Cliente
         </span>
@@ -41,8 +41,8 @@
                     <textarea class="form-control" id="direccion" required></textarea>
                 </div>
             </div>
-            <button class="btn btn-primary btn-block">Agregar</button>
         </form>
+        <button id="boton-agregar" class="btn btn-primary btn-block">Agregar</button>
     </div>
     
 </div>

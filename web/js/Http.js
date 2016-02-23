@@ -1,7 +1,7 @@
 /*
  * Emilio Rojas 2016.
  */
-var http = function(url, metodo, args) {
+var Http = function(url, metodo, args) {
 
     this.url = url;
 
@@ -22,6 +22,7 @@ var http = function(url, metodo, args) {
      */
     this.args = args;
 
+
     /*
      * jsonResponse boolean
      * htmlResponse boolean
@@ -30,15 +31,15 @@ var http = function(url, metodo, args) {
      */
     this.data = null;
 
-    this.http = new XMLHttpRequest();
+    this.httpReq = new XMLHttpRequest();
 
     this.enviar = function() {
-        http.onreadystatechange = manejar;
-        http.open(metodo, this.url, true);
+        this.httpReq.onreadystatechange = this.manejar();
+        this.httpReq.open(metodo, this.url, true);
         if (metodo === "POST" || metodo === "PUT" || metodo === "DELETE") {
-            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            http.setRequestHeader("Content-length", params.length);
-            http.setRequestHeader("Connection", "close");
+            this.httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            this.httpReq.setRequestHeader("Content-length", params.length);
+            this.httpReq.setRequestHeader("Connection", "close");
         }
         var fd = new FormData();
         if (typeof(args.params) === 'undefined' && Array.isArray(args.params)) {
@@ -46,7 +47,7 @@ var http = function(url, metodo, args) {
                 fd.append(param.name, param.value);
             }
         }
-        http.send(fd);
+        this.httpReq.send(fd);
     };
 
     /**
@@ -55,12 +56,11 @@ var http = function(url, metodo, args) {
      *                           data que maneja la respuesta del servidor.
      */
     this.manejar = function(ejecutor) {
-        if (http.readyState === XMLHttpRequest.DONE) {
-            if (http.status === args.expectedStatus) {
-                data = JSON.parse(http.responseText);
-                ejecutor.ejecutar(data);
+        if (this.httpReq.readyState === XMLHttpRequest.DONE) {
+            if (this.httpReq.status === args.expectedStatus) {
+                data = JSON.parse(this.httpReq.responseText);
             } else {
-                console.log("El servidor ha devuelto el estado: " + http.status);
+                console.log("El servidor ha devuelto el estado: " + this.httpReq.status);
             }
         }
     };

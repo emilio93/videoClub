@@ -2,12 +2,17 @@
 <%@page import="videoClub.sistema.Cliente"%>
 <%@page import="java.util.ArrayList"%>
 <h2>
-    <span style="cursor:hand;" id="activador-listar">
+    <span style="cursor: pointer" id="activador-listar">
         <i id="chev-listar" class="fa fa-chevron-circle-right"></i>
         Lista de Clientes
     </span>
 </h2>
 <div id="ventana-listar">
+    <%
+    ClientesBD cbd = new ClientesBD();
+    ArrayList<Cliente> lc = cbd.obtener();
+    if (lc != null && lc.size() != 0) {
+    %>
     <div class="row text-center">
         <div class="col-sm-2"><b>Nombre</b></div>
         <div class="col-sm-1"><b>Apellido1</b></div>
@@ -18,9 +23,7 @@
         <div class="col-sm-3"><b>Opciones</b></div>
     </div>
     <%
-    ClientesBD cbd = new ClientesBD();
-    ArrayList<Cliente> lc = cbd.leer();
-    for (Cliente c : lc) {
+        for (Cliente c : lc) {
     %>
     <div class="row text-center">
         <div class="col-sm-2"><%=c.getNombre()%></div>
@@ -37,6 +40,15 @@
         </div>
         <div class="col-sm-1">
             <button class="btn btn-danger btn-sm btn-block">Quitar <i class="fa fa-trash"></i></button>
+        </div>
+    </div>
+    <%
+        }
+    } else {
+    %>
+    <div class="row text-center">
+        <div class="col-sm-12">
+            <p>No han obtenido registros. Puede deberse a un problema técnico o bien no existen registros.</p>
         </div>
     </div>
     <%

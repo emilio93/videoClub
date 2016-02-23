@@ -13,43 +13,19 @@ public class ClientesBD extends Consultor{
         Log.start(log);
     }
 
-    private ArrayList<Cliente> rsToListaClientes(ResultSet rs) {
-        ArrayList<Cliente> lc = null;
-        try {
-            lc = new ArrayList<>();
-            while (rs.next()) {
-                lc.add(new Cliente(
-                        rs.getInt("idCliente"),
-                        rs.getInt("cedula"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido1"),
-                        rs.getString("apellido2"),
-                        rs.getInt("telefono"),
-                        rs.getString("email"),
-                        rs.getString("direccion")
-                ));
-            }
-        } catch (Exception e) {
-            log.warning(setError("No se logró crear la lista de clientes." + e.getMessage()));
-            log.info(e.getMessage());
-        }
-
-        return lc;
-    }
-
     public boolean agregar(Cliente cliente) {
         boolean exito = false;
         try {
-            PreparedStatement stmt = getCon()
-                    .prepareStatement("call addCliente(?, ?, ?, ?, ?, ?, ?)");
-            stmt.setInt(1, cliente.getCedula());
-            stmt.setString(2, cliente.getNombre());
-            stmt.setString(3, cliente.getApellido1());
-            stmt.setString(4, cliente.getApellido2());
-            stmt.setInt(5, cliente.getTelefono());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setString(7, cliente.getDireccion());
-
+            PreparedStatement stmt = preparar(
+                "call addCliente(?, ?, ?, ?, ?, ?, ?)",
+                cliente.getCedula(),
+                cliente.getNombre(),
+                cliente.getApellido1(),
+                cliente.getApellido2(),
+                cliente.getTelefono(),
+                cliente.getEmail(),
+                cliente.getDireccion()
+            );
             exito = stmt.executeUpdate() == 1;
             log.log(
                     Level.INFO,
@@ -60,16 +36,16 @@ public class ClientesBD extends Consultor{
             log.warning(setError("No se logró agregar el cliente a la base de datos."));
             log.info(e.getMessage());
         }
-
         return exito;
     }
 
-    public Cliente leerId(int id) {
+    public Cliente obtenerConId(int id) {
         Cliente cliente = null;
         try {
-            PreparedStatement stmt = getCon()
-                    .prepareStatement("call getCliente(?)");
-                    stmt.setInt(1, id);
+            PreparedStatement stmt = preparar(
+                "call getCliente(?)",
+                id
+            );
             ResultSet rs = stmt.executeQuery();
             if (rs != null) {
                 rs.next();
@@ -100,21 +76,22 @@ public class ClientesBD extends Consultor{
         return cliente;
     }
 
-    public Cliente leer(int cedula) {
-        return leerId(getIdFromCedula(cedula));
+    public Cliente obtener(int cedula) {
+        return obtenerConId(obtenerConCedula(cedula));
     }
 
-    public ArrayList<Cliente> leer() {
-        return leer(0, 0);
+    public ArrayList<Cliente> obtener() {
+        return obtener(0, 0);
     }
 
-    public ArrayList<Cliente> leer(int cantidad, int pagina) {
+    public ArrayList<Cliente> obtener(int cantidad, int pagina) {
         ArrayList<Cliente> lc = null;
         try {
-            PreparedStatement stmt = getCon()
-                    .prepareStatement("call getClientes(?, ?)");
-            stmt.setInt(1, cantidad);
-            stmt.setInt(2, pagina);
+            PreparedStatement stmt = preparar(
+                "call getClientes(?, ?)",
+                cantidad,
+                pagina
+            );
             lc = rsToListaClientes(stmt.executeQuery());
             close();
         } catch (Exception e) {
@@ -143,7 +120,7 @@ public class ClientesBD extends Consultor{
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call updateCliente(?, ?, ?, ?, ?, ?, ?, ?");
-            stmt.setInt(1, cliente.getId());
+            stmt.setInt(1, cliente.getIdCliente());
             stmt.setInt(2, cliente.getCedula());
             stmt.setString(3, cliente.getNombre());
             stmt.setString(4, cliente.getApellido1());
@@ -174,7 +151,7 @@ public class ClientesBD extends Consultor{
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call deleteCliente(?)");
-            stmt.setInt(1, getIdFromCedula(cedula));
+            stmt.setInt(1, obtenerConCedula(cedula));
 
             exito = stmt.executeUpdate() == 1;
             log.log(
@@ -201,7 +178,7 @@ public class ClientesBD extends Consultor{
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call esMoroso(?)");
-            stmt.setInt(1, getIdFromCedula(cedula));
+            stmt.setInt(1, obtenerConCedula(cedula));
             moroso = stmt.executeQuery().getInt("moroso") > 0;
             close();
         } catch (Exception e) {
@@ -214,34 +191,12 @@ public class ClientesBD extends Consultor{
         return moroso;
     }
 
-    private int getIdFromCedula(int cedula) {
-    int id = 0;
-    try {
-        PreparedStatement stmt = getCon()
-                .prepareStatement("call getIdFromCedula(?)");
-        stmt.setInt(1, cedula);
-        id = stmt.executeQuery().getInt("idCliente");
-        if (id <= 0) {
-            log.log(
-                    Level.WARNING,
-                    "No se encontró el cliente con cédula {0}",
-                    cedula
-            );
-        }
-        close();
-    } catch (Exception e) {
-        log.warning("No se logró crear la lista de clientes.");
-        log.info(e.getMessage());
-    }
-    return id;
-}
-
     public int contarPrestamosCliente(int cedula) {
         int prestamos = 0;
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call contarPrestamosCliente(?)");
-            stmt.setInt(1, getIdFromCedula(cedula));
+            stmt.setInt(1, obtenerConCedula(cedula));
             prestamos = stmt.executeQuery().getInt("prestamos");
             close();
         } catch (Exception e) {
@@ -253,5 +208,51 @@ public class ClientesBD extends Consultor{
             log.info(e.getMessage());
         }
         return prestamos;
+    }
+
+    private int obtenerConCedula(int cedula) {
+        int id = 0;
+        try {
+            PreparedStatement stmt = getCon()
+                    .prepareStatement("call getIdFromCedula(?)");
+            stmt.setInt(1, cedula);
+            id = stmt.executeQuery().getInt("idCliente");
+            if (id <= 0) {
+                log.log(
+                        Level.WARNING,
+                        "No se encontró el cliente con cédula {0}",
+                        cedula
+                );
+            }
+            close();
+        } catch (Exception e) {
+            log.warning("No se logró crear la lista de clientes.");
+            log.info(e.getMessage());
+        }
+        return id;
+    }
+
+    private ArrayList<Cliente> rsToListaClientes(ResultSet rs) {
+        ArrayList<Cliente> lc = null;
+        try {
+            lc = new ArrayList<>();
+            while (rs.next()) {
+                lc.add(new Cliente(
+                        rs.getInt("idCliente"),
+                        rs.getInt("cedula"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido1"),
+                        rs.getString("apellido2"),
+                        rs.getInt("telefono"),
+                        rs.getString("email"),
+                        rs.getString("direccion")
+                ));
+            }
+        } catch (Exception e) {
+            log.warning(setError("No se logró crear la lista de clientes." + e.getMessage()));
+            log.info(e.getMessage());
+        }
+
+        return lc;
     }
 }

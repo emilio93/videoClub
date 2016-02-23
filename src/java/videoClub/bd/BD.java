@@ -49,7 +49,11 @@ public final class BD {
     /**
      * Asigna los parámetros para la conexión con la base de datos.
      */
-    public void setConfig() {
+    private void setConfig() {
+        /*
+        Idealmente los parámetros se obtienen de un archivo editable, esto
+        no está funcionando. QUeda previsto utilizarse de esta manera.
+        */
         /*
         Properties conf = new Properties();
         try (InputStream p = this.getClass().getClassLoader().getResourceAsStream("db.properties")) {

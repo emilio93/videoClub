@@ -9,7 +9,7 @@ public class Cliente {
     /**
      * Id del cliente.
      */
-    private int id;
+    private int idCliente;
     
     /**
      * Cédula del cliente.
@@ -71,7 +71,7 @@ public class Cliente {
             String email, 
             String direccion
     ) {
-        this.id = id;
+        this.idCliente = id;
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -85,16 +85,16 @@ public class Cliente {
      * Método get para el id.
      * @return Id del cliente.
      */
-    public int getId() {
-        return id;
+    public int getIdCliente() {
+        return idCliente;
     }
     
     /**
      * Método set para el id.
-     * @param id Id del cliente.
+     * @param idCliente Id del cliente.
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public int getCedula() {

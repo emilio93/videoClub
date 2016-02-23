@@ -22,9 +22,9 @@ public class ClientesSL extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ClientesBD clientes = new ClientesBD();
-        ArrayList<Cliente> listaClientes = clientes.leer();
+        ArrayList<Cliente> listaClientes = clientes.obtener();
         
-        Cliente cliente = clientes.leer(207180854);
+        Cliente cliente = clientes.obtener(207180854);
         
         String arr = listaClientes == null? "lista null": "lista no null";
         

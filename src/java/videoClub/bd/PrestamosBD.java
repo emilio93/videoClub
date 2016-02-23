@@ -1,9 +1,11 @@
 package videoClub.bd;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import videoClub.log.Log;
 import videoClub.sistema.Cliente;
 import videoClub.sistema.Pelicula;
@@ -28,8 +30,8 @@ public class PrestamosBD extends Consultor{
         try {
             lp = new ArrayList<>();
             while(rs.next()) {
-                Cliente c = cbd.leerId(rs.getInt("idCliente"));
-                Pelicula p = pbd.leer(rs.getInt("idPelicula"));
+                Cliente c = cbd.obtenerConId(rs.getInt("idCliente"));
+                Pelicula p = pbd.obtener(rs.getInt("idPelicula"));
                 lp.add(new Prestamo(
                     rs.getInt("idPrestamo"),
                     c,
@@ -51,8 +53,8 @@ public class PrestamosBD extends Consultor{
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call addPrestamo(?, ?, ?, ?)");
-            stmt.setInt(1, prestamo.getCliente().getId());
-            stmt.setInt(2, prestamo.getPelicula().getId());
+            stmt.setInt(1, prestamo.getCliente().getIdCliente());
+            stmt.setInt(2, prestamo.getPelicula().getIdPelicula());
             stmt.setString(3, prestamo.getSalida().toString());
             stmt.setString(4, prestamo.getDevolucion().toString());
 
@@ -71,7 +73,7 @@ public class PrestamosBD extends Consultor{
     }
 
     public ArrayList<Prestamo> getPrestamosCliente(Cliente cliente) {
-        return getPrestamosCliente(cliente.getId());
+        return getPrestamosCliente(cliente.getIdCliente());
     }
 
     public ArrayList<Prestamo> getPrestamosCliente(int idCliente) {
@@ -90,7 +92,7 @@ public class PrestamosBD extends Consultor{
     }
 
     public ArrayList<Prestamo> getPrestamosPelicula(Pelicula pelicula) {
-        return getPrestamosPelicula(pelicula.getId());
+        return getPrestamosPelicula(pelicula.getIdPelicula());
     }
 
     public ArrayList<Prestamo> getPrestamosPelicula(int idPelicula) {
@@ -109,7 +111,7 @@ public class PrestamosBD extends Consultor{
     }
 
     public ArrayList<Prestamo> getPrestamosClientePelicula(Cliente cliente, Pelicula pelicula) {
-        return getPrestamosPelicula(cliente.getId, pelicula.getId());
+        return getPrestamosClientePelicula(cliente.getIdCliente(), pelicula.getIdPelicula());
     }
 
     public ArrayList<Prestamo> getPrestamosClientePelicula(int idCliente, int idPelicula) {
