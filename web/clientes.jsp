@@ -42,11 +42,11 @@ document.getElementById("activador-listar").addEventListener("click", function()
 /*
  * HTTP.
  */
-var httpAgregar = new HttpClientes("/ejecutor", "post", {
+var httpAgregar = new HttpClientes("ejecutor", "post", {
     expectedStatus: 200,
     params: { pedido: "agregarCliente" }
 });
-document.getElementById("boton-agregar").addEventListener("click", function() { httpAgregar.agregar() });
+document.getElementById("boton-agregar").addEventListener("click", function() { httpAgregar.agregar(); });
 
 /*
  * Mostrar Contenido.

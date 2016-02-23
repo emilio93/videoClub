@@ -59,6 +59,7 @@ var Http = function(url, metodo, args) {
         if (this.httpReq.readyState === XMLHttpRequest.DONE) {
             if (this.httpReq.status === args.expectedStatus) {
                 data = JSON.parse(this.httpReq.responseText);
+                swal.close();
             } else {
                 console.log("El servidor ha devuelto el estado: " + this.httpReq.status);
             }

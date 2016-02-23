@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author usuario54
  */
-@WebServlet(name = "Ejecutor", urlPatterns = {"/pedido"})
+@WebServlet(name = "Ejecutor", urlPatterns = {"/ejecutor"})
 public class Ejecutor extends HttpServlet {
 
     
@@ -30,11 +30,16 @@ public class Ejecutor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html");
+        request.setAttribute("message", "hola");
+        request.getRequestDispatcher("peliculas.jsp").forward(request, response);
     }
 
     @Override
     public String getServletInfo() {
         return "Realiza la interacción con la base de datos.";
     }
+    
+    
 
 }
