@@ -45,6 +45,7 @@ public class Prestamo {
         LocalDate devolucion,
         boolean devuelta
     ) {
+        this.idPrestamo = idPrestamo;
         this.cliente = cliente;
         this.pelicula = pelicula;
         this.salida = salida;

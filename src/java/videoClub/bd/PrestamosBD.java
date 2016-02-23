@@ -1,6 +1,8 @@
 package videoClub.bd;
 
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import videoClub.log.Log;
 import videoClub.sistema.Cliente;
@@ -18,7 +20,7 @@ public class PrestamosBD extends Consultor{
     }
 
     private ArrayList<Prestamo> rsToListaPrestamos(ResultSet rs) {
-        ArrayList<Pelicula> lp = null;
+        ArrayList<Prestamo> lp = null;
         ClientesBD cbd = new ClientesBD();
         PeliculasBD pbd = new PeliculasBD();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");

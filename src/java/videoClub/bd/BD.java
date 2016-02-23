@@ -50,6 +50,7 @@ public final class BD {
      * Asigna los parámetros para la conexión con la base de datos.
      */
     public void setConfig() {
+        /*
         Properties conf = new Properties();
         try (InputStream p = this.getClass().getClassLoader().getResourceAsStream("db.properties")) {
             conf.load(p);
@@ -58,6 +59,7 @@ public final class BD {
             log.warning("No se logró obtener la configuración de la base de datos.");
             log.info(e.getMessage());
         }
+        */
 
         String driver = "jdbc:mysql://"; // conf.getProperty("db.driver");
         String host = "localhost"; // conf.getProperty("db.host");

@@ -19,7 +19,7 @@ public class ClientesBD extends Consultor{
             lc = new ArrayList<>();
             while (rs.next()) {
                 lc.add(new Cliente(
-                        rs.getInt("id"),
+                        rs.getInt("idCliente"),
                         rs.getInt("cedula"),
                         rs.getString("nombre"),
                         rs.getString("apellido1"),
@@ -30,7 +30,7 @@ public class ClientesBD extends Consultor{
                 ));
             }
         } catch (Exception e) {
-            log.warning(setError("No se logró crear la lista de clientes."));
+            log.warning(setError("No se logró crear la lista de clientes." + e.getMessage()));
             log.info(e.getMessage());
         }
 
@@ -64,7 +64,7 @@ public class ClientesBD extends Consultor{
         return exito;
     }
 
-    public leerId(int id) {
+    public Cliente leerId(int id) {
         Cliente cliente = null;
         try {
             PreparedStatement stmt = getCon()

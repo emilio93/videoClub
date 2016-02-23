@@ -34,7 +34,7 @@ var http = function(url, metodo, args) {
 
     this.enviar = function() {
         http.onreadystatechange = manejar;
-        http.open(etodo, this.url, true);
+        http.open(metodo, this.url, true);
         if (metodo === "POST" || metodo === "PUT" || metodo === "DELETE") {
             http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             http.setRequestHeader("Content-length", params.length);
@@ -47,7 +47,7 @@ var http = function(url, metodo, args) {
             }
         }
         http.send(fd);
-    }
+    };
 
     /**
      * Maneja la respuesta a un llamado http.
@@ -63,13 +63,13 @@ var http = function(url, metodo, args) {
                 console.log("El servidor ha devuelto el estado: " + http.status);
             }
         }
-    }
+    };
 
     this.actualizarHtml = function(destino, contenido) {
         document.getElementById(destino).innerHTML = contenido;
-    }
+    };
 
     this.mostrarAlerta = function(mensaje) {
         
-    }
-}
+    };
+};

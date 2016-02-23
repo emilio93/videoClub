@@ -7,6 +7,6 @@ var httpCliente = function(url, metodo, args) {
 
     this.ejecutar = function(data) {
 
-    }
+    };
 
-}
+};
