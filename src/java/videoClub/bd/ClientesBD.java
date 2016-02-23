@@ -63,59 +63,45 @@ public class ClientesBD extends Consultor{
 
         return exito;
     }
-    
-    public Cliente leer(int cedula) {
-        PreparedStatement stmt = null;
+
+    public leerId(int id) {
         Cliente cliente = null;
-        ResultSet rs = null;
         try {
-            stmt = getCon()
+            PreparedStatement stmt = getCon()
                     .prepareStatement("call getCliente(?)");
-            stmt.setInt(1, getIdFromCedula(cedula));
-            rs = stmt.executeQuery();
-        } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró leer el cliente con cedula "
-                    + "{0} de la base de datos: " + e.getMessage(),
-                    cedula);
-            log.info(e.getMessage());
-            setError("No se logró leer el cliente con cedula "
-                    + cedula + " de la base de datos: " + e.getMessage());
-            for (StackTraceElement stackTrace : e.getStackTrace()) {
-                setError(getError() + stackTrace + "<br>");
-            }
-        }
-        try {
-            if(rs != null){
-                while (rs.next()) {
-                    cliente = new Cliente(
-                            rs.getInt("idCliente"),
-                            rs.getInt("cedula"),
-                            rs.getString("nombre"),
-                            rs.getString("apellido1"),
-                            rs.getString("apellido1"),
-                            rs.getInt("telefono"),
-                            rs.getString("email"),
-                            rs.getString("direccion")
-                    );
-            }
-        
+                    stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs != null) {
+                rs.next();
+                cliente = new Cliente(
+                    rs.getInt("idCliente"),
+                    rs.getInt("cedula"),
+                    rs.getString("nombre"),
+                    rs.getString("apellido1"),
+                    rs.getString("apellido1"),
+                    rs.getInt("telefono"),
+                    rs.getString("email"),
+                    rs.getString("direccion")
+                );
             }
         } catch (Exception e) {
             log.log(
                     Level.WARNING,
-                    "No se logró leer el cliente con cedula "
+                    "No se logró leer el cliente con id "
                     + "{0} de la base de datos: " + e.getMessage(),
-                    cedula);
+                    id);
             log.info(e.getMessage());
-            setError("No se logró leer el cliente con cedula "
-                    + cedula + " de la base de datos: " + e.getMessage() + "<br>");
+            setError("No se logró leer el cliente con id "
+                    + id + " de la base de datos: " + e.getMessage() + "<br>");
             for (StackTraceElement stackTrace : e.getStackTrace()) {
                 setError(getError() + stackTrace + "<br>");
             }
         }
         return cliente;
+    }
+
+    public Cliente leer(int cedula) {
+        return leerId(getIdFromCedula(cedula));
     }
 
     public ArrayList<Cliente> leer() {
@@ -137,7 +123,7 @@ public class ClientesBD extends Consultor{
         }
         return lc;
     }
-    
+
     public ArrayList<Cliente> clientesMorosos() {
         ArrayList<Cliente> lc = null;
         try {
@@ -151,7 +137,7 @@ public class ClientesBD extends Consultor{
         }
         return lc;
     }
-    
+
     public boolean actualizar(Cliente cliente) {
         boolean exito = false;
         try {
@@ -209,7 +195,7 @@ public class ClientesBD extends Consultor{
         }
         return exito;
     }
-    
+
     public boolean esMoroso(int cedula) {
         boolean moroso = false;
         try {
@@ -220,14 +206,14 @@ public class ClientesBD extends Consultor{
             close();
         } catch (Exception e) {
             log.log(
-                    Level.WARNING, 
-                    "No se logró determinar la morosidad del cliente con cedula {0}.", 
+                    Level.WARNING,
+                    "No se logró determinar la morosidad del cliente con cedula {0}.",
                     cedula);
             log.info(e.getMessage());
         }
         return moroso;
     }
-    
+
     private int getIdFromCedula(int cedula) {
     int id = 0;
     try {
@@ -249,7 +235,7 @@ public class ClientesBD extends Consultor{
     }
     return id;
 }
-    
+
     public int contarPrestamosCliente(int cedula) {
         int prestamos = 0;
         try {
@@ -260,8 +246,8 @@ public class ClientesBD extends Consultor{
             close();
         } catch (Exception e) {
             log.log(
-                    Level.WARNING, 
-                    "No se logró contar los prestamos del cliente con cedula {0}", 
+                    Level.WARNING,
+                    "No se logró contar los prestamos del cliente con cedula {0}",
                     cedula
             );
             log.info(e.getMessage());

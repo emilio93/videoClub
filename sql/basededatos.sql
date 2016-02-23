@@ -35,11 +35,20 @@ CREATE TABLE `configuracion` (
 INSERT INTO
     configuracion(`nombre`, `valor`, `tipo`, `descripcion`)
 VALUES
-    ('LIMITE_PELICULAS','1000','int', 'Máximo de películas en el sistema.'),
-    ('COSTO_RENTA','1000','int', 'Costo de la renta de una película.'),
-    ('MULTA','300','int', 'El costo de la multa por día extra sin devolver la película.'),
-    ('MAX_PELICULAS_CLIENTE','5','int', 'Máximo películas que puede tener en renta un cliente.'),
-    ('MAX_DIAS_RENTA','8','int', 'La cantidad máxima de dias antes de comenzar a cobrarse multa.');
+    ('LIMITE_PELICULAS','1000','int',
+        'Máximo de películas en el sistema.'),
+
+    ('COSTO_RENTA','1000','int',
+        'Costo de la renta de una película.'),
+
+    ('MULTA','300','int',
+        'Multa por día extra sin devolver la película.'),
+
+    ('MAX_PELICULAS_CLIENTE','5','int',
+        'Máxima cantidad de películas que puede tener en préstamo un cliente.'),
+
+    ('MAX_DIAS_RENTA','8','int',
+        'La cantidad máxima de días antes de comenzar a cobrarse multa.');
 
 DROP TABLE IF EXISTS `peliculas`;
 CREATE TABLE `peliculas` (
@@ -64,20 +73,26 @@ CREATE TABLE `prestamos` (
   `salida` date NOT NULL,
   `devolucion` date NOT NULL,
   `devuelta` tinyint(4) DEFAULT '0',
-  PRIMARY KEY (`idPrestamo`),
-  KEY `fkClientes` (`idCliente`),
-  KEY `fkPeliculas` (`idPelicula`),
-  CONSTRAINT `fkClientes` FOREIGN KEY (`idCliente`) REFERENCES clientes(`idCliente`) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT `fkPeliculas` FOREIGN KEY (`idPelicula`) REFERENCES peliculas(`idPelicula`) ON UPDATE CASCADE ON DELETE CASCADE
+  PRIMARY KEY (`idPrestamo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---  /***************************************************************************
---   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
---   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
---   * PROCEDIMIENTOS ALMACENADOS  * * * * * * * * * * * * * * * * * * * * * * *
---   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
---   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
---   **************************************************************************/
+
+ALTER TABLE prestamos
+ADD CONSTRAINT fkClientes
+FOREIGN KEY fkClientes(idCliente)
+REFERENCES clientes(idCliente)
+ON UPDATE CASCADE
+ON DELETE RESTRICT;
+
+ALTER TABLE prestamos
+ADD CONSTRAINT fkPeliculas
+FOREIGN KEY fkPeliculas(idPelicula)
+REFERENCES peliculas(idPelicula)
+ON UPDATE CASCADE
+ON DELETE RESTRICT;
+
+
+
 DELIMITER ;;
 CREATE PROCEDURE `addCliente`(
 	IN pcedula INT,
@@ -89,8 +104,10 @@ CREATE PROCEDURE `addCliente`(
     IN pdireccion LONGTEXT
 )
 BEGIN
-	INSERT INTO clientes(cedula, nombre, apellido1, apellido2, telefono, email, direccion)
-	values (pcedula, pnombre, papellido1, papellido2, ptelefono, pemail, pdireccion);
+	INSERT INTO
+    clientes(cedula, nombre, apellido1, apellido2, telefono, email, direccion)
+	VALUES
+    (pcedula, pnombre, papellido1, papellido2, ptelefono, pemail, pdireccion);
 END ;;
 DELIMITER ;
 
@@ -102,8 +119,10 @@ CREATE PROCEDURE `addConfiguracion`(
     IN pdescripcion VARCHAR(255)
 )
     BEGIN
-    INSERT INTO configuracion(nombre, valor, tipo, descripcion)
-    VALUES (pnombre, pvalor, ptipo, pdescripcion);
+    INSERT INTO
+    configuracion(nombre, valor, tipo, descripcion)
+    VALUES
+    (pnombre, pvalor, ptipo, pdescripcion);
 END ;;
 DELIMITER ;
 
@@ -119,8 +138,10 @@ CREATE PROCEDURE `addPelicula`(
     IN pcantidad INT
 )
 BEGIN
-	INSERT INTO peliculas(titulo, direccion, produccion, ano, genero, duracion, sinopsis, cantidad)
-	VALUES (ptitulo, pdireccion, pproduccion, pano, pgenero, pduracion, psinopsis, pcantidad);
+	INSERT INTO
+    peliculas(titulo, direccion, produccion, ano, genero, duracion, sinopsis, cantidad)
+	VALUES
+    (ptitulo, pdireccion, pproduccion, pano, pgenero, pduracion, psinopsis, pcantidad);
 END ;;
 DELIMITER ;
 
@@ -132,8 +153,10 @@ CREATE PROCEDURE `addPrestamo`(
     IN pdevolucion VARCHAR(255)
 )
 BEGIN
-	INSERT INTO prestamos(idCliente, idPelicula, salida, devolucion)
-    VALUES (pidCliente, pidPelicula, psalida, pdevolucion);
+	INSERT INTO
+    prestamos(idCliente, idPelicula, salida, devolucion)
+    VALUES
+    (pidCliente, pidPelicula, psalida, pdevolucion);
 END ;;
 DELIMITER ;
 
@@ -328,33 +351,45 @@ BEGIN
     IF pdevuelta = 0 THEN
 		SELECT
 			prestamos.salida, prestamos.devolucion, prestamos.devuelta,
-			clientes.cedula, clientes.nombre, clientes.apellido1, clientes.apellido2, clientes.telefono, clientes.email,
-			peliculas.titulo, peliculas.direccion, peliculas.produccion, peliculas.ano
+			clientes.cedula, clientes.nombre, clientes.apellido1,
+            clientes.apellido2, clientes.telefono, clientes.email,
+			peliculas.titulo, peliculas.direccion, peliculas.produccion,
+            peliculas.ano
         FROM prestamos
-		INNER JOIN clientes ON clientes.idCliente = prestamos.idCliente
-        RIGHT OUTER JOIN peliculas ON peliculas.idPelicula = prestamos.idPelicula
+		INNER JOIN clientes
+        ON clientes.idCliente = prestamos.idCliente
+        RIGHT OUTER JOIN peliculas
+        ON peliculas.idPelicula = prestamos.idPelicula
 		WHERE prestamos.idCliente = pidCliente AND prestamos.devuelta = 0;
 	END IF;
 
     IF pdevuelta = 1 THEN
 		SELECT
 			prestamos.salida, prestamos.devolucion, prestamos.devuelta,
-			clientes.cedula, clientes.nombre, clientes.apellido1, clientes.apellido2, clientes.telefono, clientes.email,
-			peliculas.titulo, peliculas.direccion, peliculas.produccion, peliculas.ano
+			clientes.cedula, clientes.nombre, clientes.apellido1,
+            clientes.apellido2, clientes.telefono, clientes.email,
+			peliculas.titulo, peliculas.direccion, peliculas.produccion,
+            peliculas.ano
         FROM prestamos
-		INNER JOIN clientes ON clientes.idCliente = prestamos.idCliente
-        RIGHT OUTER JOIN peliculas ON peliculas.idPelicula = prestamos.idPelicula
+		INNER JOIN clientes
+        ON clientes.idCliente = prestamos.idCliente
+        RIGHT OUTER JOIN peliculas
+        ON peliculas.idPelicula = prestamos.idPelicula
 		WHERE prestamos.idCliente = pidCliente AND prestamos.devuelta = 1;
 	END IF;
 
     IF pdevuelta = 2 THEN
 		SELECT
 			prestamos.salida, prestamos.devolucion, prestamos.devuelta,
-			clientes.cedula, clientes.nombre, clientes.apellido1, clientes.apellido2, clientes.telefono, clientes.email,
-			peliculas.titulo, peliculas.direccion, peliculas.produccion, peliculas.ano
+			clientes.cedula, clientes.nombre, clientes.apellido1,
+            clientes.apellido2, clientes.telefono, clientes.email,
+			peliculas.titulo, peliculas.direccion, peliculas.produccion,
+            peliculas.ano
         FROM prestamos
-		INNER JOIN clientes ON clientes.idCliente = prestamos.idCliente
-        RIGHT OUTER JOIN peliculas ON peliculas.idPelicula = prestamos.idPelicula
+		INNER JOIN clientes
+        ON clientes.idCliente = prestamos.idCliente
+        RIGHT OUTER JOIN peliculas
+        ON peliculas.idPelicula = prestamos.idPelicula
 		WHERE prestamos.idCliente = pidCliente;
 	END IF;
 
@@ -372,7 +407,8 @@ BEGIN
     -- Obtiene únicamente los préstamos activos.
 	SELECT
 		prestamos.salida, prestamos.devolucion,
-        cliente.cedula, cliente.nombre, cliente.apellido1, cliente.apellido2, cliente.telefono, cliente.email,
+        cliente.cedula, cliente.nombre, cliente.apellido1, cliente.apellido2,
+        cliente.telefono, cliente.email,
         pelicula.titulo, pelicula.direccion, pelicula.produccion, pelicula.ano
     FROM prestamos
     INNER JOIN clientes ON clientes.idCliente = prestamos.idCliente

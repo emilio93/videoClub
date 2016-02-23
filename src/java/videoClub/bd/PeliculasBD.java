@@ -10,12 +10,12 @@ import videoClub.sistema.Pelicula;
  * @author Emilio Rojas
  */
 public class PeliculasBD extends Consultor{
-    
+
     public PeliculasBD() {
         Log.start(log);
     }
-    
-    private ArrayList<Pelicula> rsToList(ResultSet rs) {
+
+    private ArrayList<Pelicula> rsToListaPeliculas(ResultSet rs) {
         ArrayList<Pelicula> lp = null;
         try {
             lp = new ArrayList<>();
