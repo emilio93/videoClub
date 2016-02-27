@@ -33,7 +33,7 @@ public class ClientesBD extends Consultor{
                     Boolean.toString(exito));
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró agregar el cliente a la base de datos."));
+            log.warning(setError("No se logró agregar el cliente a la base de datos: " + e.getMessage()));
             log.info(e.getMessage());
         }
         return exito;

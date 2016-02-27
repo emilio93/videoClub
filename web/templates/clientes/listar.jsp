@@ -14,19 +14,21 @@
     if (lc != null && lc.size() != 0) {
     %>
     <div class="row text-center">
-        <div class="col-sm-2"><b>Nombre</b></div>
+        <div class="col-sm-1"><b>Cedula</b></div>
+        <div class="col-sm-1"><b>Nombre</b></div>
         <div class="col-sm-1"><b>Apellido1</b></div>
         <div class="col-sm-1"><b>Apellido2</b></div>
         <div class="col-sm-2"><b>Email</b></div>
         <div class="col-sm-1"><b>Telefono</b></div>
-        <div class="col-sm-2"><b>Dirección</b></div>
+        <div class="col-sm-2"><b>DirecciÃ³n</b></div>
         <div class="col-sm-3"><b>Opciones</b></div>
     </div>
     <%
         for (Cliente c : lc) {
     %>
     <div class="row text-center">
-        <div class="col-sm-2"><%=c.getNombre()%></div>
+        <div class="col-sm-1"><%=c.getCedula()%></div>
+        <div class="col-sm-1"><%=c.getNombre()%></div>
         <div class="col-sm-1"><%=c.getApellido1()%></div>
         <div class="col-sm-1"><%=c.getApellido2()%></div>
         <div class="col-sm-2"><%=c.getEmail()%></div>
@@ -48,7 +50,7 @@
     %>
     <div class="row text-center">
         <div class="col-sm-12">
-            <p>No han obtenido registros. Puede deberse a un problema técnico o bien no existen registros.</p>
+            <p>No han obtenido registros. Puede deberse a un problema tï¿½cnico o bien no existen registros.</p>
         </div>
     </div>
     <%

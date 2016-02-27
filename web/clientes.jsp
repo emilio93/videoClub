@@ -10,11 +10,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Clientes</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
         <style>
-            <%@include file="/swal/sweetalert.css" %>
+            <%@ include file="/css/bootstrap-cosmo.min.css" %>
         </style>
+        <style media="screen">
+            <%@ include file="/swal/sweetalert.css" %>
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     </head>
     <body style="display: none">
 
@@ -30,23 +32,24 @@
 <%@ include file="/js/Http.js" %>
 <%@ include file="/js/HttpClientes.js" %>
 <%@ include file="/js/windowToggle.js" %>
-
 /*
  * Window Toggle.
  */
 var toggleAgregar = new wToggle("activador-agregar", "ventana-agregar", "chev-agregar");
 var toggleListar = new wToggle("activador-listar", "ventana-listar", "chev-listar");
-document.getElementById("activador-agregar").addEventListener("click", function() { toggleAgregar.cambiar(); });
-document.getElementById("activador-listar").addEventListener("click", function() { toggleListar.cambiar(); });
+document.querySelector("#activador-agregar").addEventListener("click", function() { toggleAgregar.cambiar(); });
+document.querySelector("#activador-listar").addEventListener("click", function() { toggleListar.cambiar(); });
 
 /*
  * HTTP.
  */
 var httpAgregar = new HttpClientes("ejecutor", "post", {
-    expectedStatus: 200,
-    params: { pedido: "agregarCliente" }
+    expectedStatus: 200
 });
-document.getElementById("boton-agregar").addEventListener("click", function() { httpAgregar.agregar(); });
+
+
+document.querySelector('#form-agregar').addEventListener('submit',
+    function() { httpAgregar.agregar(); });
 
 /*
  * Mostrar Contenido.

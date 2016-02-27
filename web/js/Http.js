@@ -34,43 +34,38 @@ var Http = function(url, metodo, args) {
     this.httpReq = new XMLHttpRequest();
 
     this.enviar = function() {
-        this.httpReq.onreadystatechange = this.manejar();
-        this.httpReq.open(metodo, this.url, true);
-        if (metodo === "POST" || metodo === "PUT" || metodo === "DELETE") {
+        this.httpReq.open(this.metodo, this.url, true);
+        var requestString = "";
+        for (var param in args.params) {
+            requestString += param + "=" + args.params[param] + "&";
+        }
+        requestString = requestString.slice(0, -1);
+
+        if (this.metodo === "POST" || this.metodo === "PUT" || this.metodo === "DELETE") {
             this.httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            this.httpReq.setRequestHeader("Content-length", params.length);
-            this.httpReq.setRequestHeader("Connection", "close");
         }
-        var fd = new FormData();
-        if (typeof(args.params) === 'undefined' && Array.isArray(args.params)) {
-            for (var param in args.params) {
-                fd.append(param.name, param.value);
+        this.httpReq.onreadystatechange = function(evento) {
+            console.log(this.httpReq);
+            if (this.httpReq.readyState == 4) {
+                console.log("El servidor contesto");
+                if (this.httpReq.status == this.args.expectedStatus) {
+                    this.data = JSON.parse(this.httpReq.responseText);
+                    swal.close();
+                    console.log("El servidor contesto bien");
+                } else {
+                    console.log("El servidor ha devuelto el estado: " + this.httpReq.status);
+                }
             }
-        }
-        this.httpReq.send(fd);
+            else {
+                console.log("El servidor no contesto" + this.httpReq.readyState);
+            }
+        };
+        this.httpReq.send(requestString);
     };
 
-    /**
-     * Maneja la respuesta a un llamado http.
-     * @param  {Object} ejecutor Implementa la funcion ejecutar con el parámetro
-     *                           data que maneja la respuesta del servidor.
-     */
-    this.manejar = function(ejecutor) {
-        if (this.httpReq.readyState === XMLHttpRequest.DONE) {
-            if (this.httpReq.status === args.expectedStatus) {
-                data = JSON.parse(this.httpReq.responseText);
-                swal.close();
-            } else {
-                console.log("El servidor ha devuelto el estado: " + this.httpReq.status);
-            }
-        }
-    };
+
 
     this.actualizarHtml = function(destino, contenido) {
         document.getElementById(destino).innerHTML = contenido;
-    };
-
-    this.mostrarAlerta = function(mensaje) {
-        
     };
 };
