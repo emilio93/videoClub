@@ -12,7 +12,7 @@ Para poder compilar y correr este proyecto se debe hacer lo siguiente:
 
 - El proyecto se trabaja con MySql, java, javascript y html.
 - Se requiere utilizar un buscador moderno para la correcta visualización de la aplicación.
-Se han probado Firefox, Chrome y Edge en sus versiones estables más recientes a la fecha de
+Se han probado Firefox, Chrome en sus versiones estables más recientes a la fecha de
 modificación de este archivo.
 - El proyecto se trabaja en netBeans, por lo que se recomienda utilizar este
 IDE.
