@@ -17,6 +17,28 @@ public class Pelicula {
     private int cantidad; // De ejemplares.
 
     public Pelicula() {}
+
+    public Pelicula(
+            int idPelicula, 
+            String titulo, 
+            String direccion, 
+            String produccion, 
+            int ano, 
+            String genero, 
+            int duracion, 
+            String sinopsis, 
+            int cantidad
+    ) {
+        this.idPelicula = idPelicula;
+        this.titulo = titulo;
+        this.direccion = direccion;
+        this.produccion = produccion;
+        this.ano = ano;
+        this.genero = genero;
+        this.duracion = duracion;
+        this.sinopsis = sinopsis;
+        this.cantidad = cantidad;
+    }
     
     public Pelicula(
             String titulo, 

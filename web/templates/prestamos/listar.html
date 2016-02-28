@@ -1,0 +1,41 @@
+<h2>
+    <span style='cursor: pointer' id='activador-listar'>
+        <i id='chev-listar' class='fa fa-chevron-circle-right'></i>
+        Lista de Clientes
+    </span>
+</h2>
+<div id='ventana-listar'>
+    <div class='row'>
+        <div class="col-sm-8">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" id="clientes-listado-todos"><a href="#">Todos</a></li>
+                <li role="presentation" id="clientes-listado-morosos"><a href="#">Morosos</a></li>
+
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <form class="form-inline" id="clientes-listado-buscar" onsubmit="return false;">
+                <div class="form-group">
+                    <input class="form-control" id="buscar-cedula" type="number" placeholder="Buscar por C�dula">
+                </div>
+                <button type="submit" class="btn btn-default">Buscar <i class="fa fa-search fa-fw"></i></button></button>
+            </form>
+        </div>
+    </div>
+    <hr style='margin: 5px 0 5px 0;'>
+
+    <div class='row text-center'>
+        <div class='col-sm-1'><b>C�dula</b></div>
+        <div class='col-sm-1'><b>Nombre</b></div>
+        <div class='col-sm-2'><b>Apellidos</b></div>
+        <div class='col-sm-2'><b>Email</b></div>
+        <div class='col-sm-1'><b>Tel�fono</b></div>
+        <div class='col-sm-2'><b>Direcci�n</b></div>
+        <div class='col-sm-3'><b>Opciones</b></div>
+    </div>
+    <hr style='margin: 5px 0 5px 0;'>
+
+    <div id="clientes-listado">
+    </div>
+
+</div>

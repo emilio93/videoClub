@@ -1,59 +1,34 @@
-<%@page import="java.sql.*"%>
-<%@page import="videoClub.bd.BD"%>
-<%@page import="videoClub.bd.ClientesBD"%>
-<%@page import="javax.servlet.http.HttpServletRequest"%>
-<%@page import="videoClub.sistema.Cliente"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="javax.servlet.http.HttpServletRequest"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Clientes</title>
-        <style>
-            <%@ include file="/css/bootstrap-cosmo.min.css" %>
-        </style>
         <style media="screen">
             <%@ include file="/swal/sweetalert.css" %>
         </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-git2.min.js" charset="utf-8"></script>
     </head>
     <body style="display: none">
 
         <div class="container">
             <%@ include file="/templates/header.jsp" %>
-            <%@ include file="/templates/clientes/agregar.jsp" %>
+            <%@ include file="/templates/clientes/agregar.html" %>
             <hr>
-            <%@ include file="/templates/clientes/listar.jsp" %>
+            <%@ include file="/templates/clientes/listar.html" %>
         </div>
     </body>
 <script>
 <%@ include file="/swal/sweetalert.min.js" %>
-<%@ include file="/js/Http.js" %>
-<%@ include file="/js/HttpClientes.js" %>
-<%@ include file="/js/windowToggle.js" %>
-/*
- * Window Toggle.
- */
-var toggleAgregar = new wToggle("activador-agregar", "ventana-agregar", "chev-agregar");
-var toggleListar = new wToggle("activador-listar", "ventana-listar", "chev-listar");
-document.querySelector("#activador-agregar").addEventListener("click", function() { toggleAgregar.cambiar(); });
-document.querySelector("#activador-listar").addEventListener("click", function() { toggleListar.cambiar(); });
-
-/*
- * HTTP.
- */
-var httpAgregar = new HttpClientes("ejecutor", "post", {
-    expectedStatus: 200
-});
-
-
-document.querySelector('#form-agregar').addEventListener('submit',
-    function() { httpAgregar.agregar(); });
-
-/*
- * Mostrar Contenido.
- */
-document.getElementsByTagName("body")[0].style.display = "";
+    <%@ include file="/js/windowToggle.js" %>
+    <%@ include file="/js/Http.js" %>
+    <%@ include file="/js/clientes/HttpClientesAgregar.js" %>
+    <%@ include file="/js/clientes/HttpClientesListar.js" %>
+    <%@ include file="/js/clientes/HttpClientesActualizar.js" %>
+    <%@ include file="/js/clientes/HttpClientesEliminar.js" %>
+    <%@ include file="/js/clientes/Clientes.js" %>
 </script>
 </html>
