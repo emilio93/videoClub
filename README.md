@@ -20,11 +20,14 @@ IDE.
 este servidor.
 - Se necesitará MySQL. Para el proyecto se utilizó la versión 5.7.
 - Las siguientes librerias de java: 
-  - Driver JDBC para MySQL, netBeans provee ```MySQL JDBC Driver```.
-  - Lang de Apache commons (```commons-lang3-3.4.jar```), se utiliza para escapar ```java.lang.String``` según 
-  diferentes estandares.
-  - Gson de Google (```gson-2.6.2.jar```), se utiliza para convertir ```java.util.ArrayList```
-  a json rápidamente.
+  - Driver JDBC para MySQL, netBeans provee ```MySQL JDBC Driver```. Se puede descargar también
+  en [este](http://mvnrepository.com/artifact/mysql/mysql-connector-java) enlace.
+  - Lang de Apache commons 
+  [```commons-lang3-3.4.jar```](http://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.4), 
+  se utiliza para escapar ```java.lang.String``` según diferentes estandares.
+  - Gson de Google 
+  [```gson-2.6.2.jar```](http://mvnrepository.com/artifact/com.google.code.gson/gson/2.6.2), 
+  se utiliza para convertir ```java.util.ArrayList``` a json rápidamente.
 - Se hace uso de las siguientes librerías, (integradas dentro del proyecto):
   - [Bootstrap](http://getbootstrap.com/) de Twitter con el tema [Cosmo](https://bootswatch.com/cosmo/).
   - [JQuery](https://jquery.com/).
