@@ -81,6 +81,24 @@ public class Cliente {
         this.direccion = direccion;
     }
     
+    public Cliente(
+            int cedula, 
+            String nombre, 
+            String apellido1, 
+            String apellido2, 
+            int telefono, 
+            String email, 
+            String direccion
+    ) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido1 = apellido1;
+        this.apellido2 = apellido2;
+        this.telefono = telefono;
+        this.email = email;
+        this.direccion = direccion;
+    }
+    
     /**
      * Método get para el id.
      * @return Id del cliente.

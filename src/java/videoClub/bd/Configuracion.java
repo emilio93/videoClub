@@ -24,9 +24,11 @@ public class Configuracion extends Consultor{
      * Obtiene el valor como un int.
      */
     public int getInt(String nombre) {
-        int valor = Integer.MIN_VALUE;
-        ResultSet rs = getRs(nombre);
+        int valor = 0;
+        ResultSet rs = null;
         try {
+            PreparedStatement stmt = preparar("call getConfiguracion(?)", nombre);
+            rs = stmt.executeQuery();
             if (rs.next()) valor = Integer.parseInt(rs.getString("valor"));
         } catch (Exception e) {
             log.log(
@@ -48,7 +50,22 @@ public class Configuracion extends Consultor{
      */
     public String getString(String nombre) {
         String valor = null;
-        ResultSet rs = getRs(nombre);
+        ResultSet rs = null;
+        try {
+            PreparedStatement stmt = preparar("call getConfiguracion(?)", nombre);
+            rs = stmt.executeQuery();
+        } catch (Exception e) {
+            log.log(
+                Level.WARNING,
+                "No se logró leer la configuración solicitada: {0}",
+                e.getMessage()
+            );
+            setError("No se logró leer la configuración solicitada: " +
+                    e.getMessage());
+            for (StackTraceElement stackTrace : e.getStackTrace()) {
+                setError(getError() + stackTrace + "<br>");
+            }
+        }
         try {
             if (rs.next()) valor = rs.getString("valor");
         } catch (Exception e) {
@@ -71,7 +88,22 @@ public class Configuracion extends Consultor{
      */
     public String getDescripcion(String nombre) {
         String descripcion = null;
-        ResultSet rs = getRs(nombre);
+        ResultSet rs = null;
+        try {
+            PreparedStatement stmt = preparar("call getConfiguracion(?)", nombre);
+            rs = stmt.executeQuery();
+        } catch (Exception e) {
+            log.log(
+                Level.WARNING,
+                "No se logró leer la configuración solicitada: {0}",
+                e.getMessage()
+            );
+            setError("No se logró leer la configuración solicitada: " +
+                    e.getMessage());
+            for (StackTraceElement stackTrace : e.getStackTrace()) {
+                setError(getError() + stackTrace + "<br>");
+            }
+        }
         try {
             if (rs.next()) descripcion = rs.getString("descripcion");
         } catch (Exception e) {

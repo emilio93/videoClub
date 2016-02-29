@@ -26,7 +26,7 @@ public class PrestamosBD extends Consultor{
         ArrayList<Prestamo> lp = null;
         ClientesBD cbd = new ClientesBD();
         PeliculasBD pbd = new PeliculasBD();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             lp = new ArrayList<>();
             while(rs.next()) {
@@ -38,11 +38,11 @@ public class PrestamosBD extends Consultor{
                     p,
                     LocalDate.parse(rs.getString("salida"), formatter),
                     LocalDate.parse(rs.getString("devolucion"), formatter),
-                    rs.getInt("devuelta") == 1
+                    rs.getBoolean("devuelta")
                 ));
             }
         } catch (Exception e) {
-            log.warning("No se logró crear la lista de peliculas.");
+            log.warning(setError("No se logró crear la lista de prestamos. " + e.getMessage()));
             log.info(e.getMessage());
         }
         return lp;
@@ -59,6 +59,7 @@ public class PrestamosBD extends Consultor{
             stmt.setString(4, prestamo.getDevolucion().toString());
 
             exito = stmt.executeUpdate() == 1;
+            if (!exito) setError( getError() + "No se pudo agregar el préstamo.");
             log.log(
                     Level.INFO,
                     "Agregando préstamo a la base de datos: {0}",
@@ -68,8 +69,51 @@ public class PrestamosBD extends Consultor{
             log.warning(setError("No se logró agregar el préstamo a la base de datos."));
             log.info(e.getMessage());
         }
-
+        setError(getError() + "devolviendo exito");
         return exito;
+    }
+    
+    public Prestamo getPrestamo(int idPrestamo) {
+        Prestamo prestamo = null;
+        try {
+            PreparedStatement stmt = getCon()
+                    .prepareStatement("call getPrestamo(?)");
+            stmt.setInt(1, idPrestamo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                prestamo = new Prestamo(
+                    rs.getInt("idPrestamo"),
+                    rs.getInt("idCliente"),
+                    rs.getInt("idPelicula"),
+                    rs.getString("salida"), 
+                    rs.getString("devolucion"),
+                    rs.getInt("devuelta") == 1
+                );
+            }
+            close();
+        } catch (Exception e) {
+            log.warning(setError("No se logró obtener el préstamo de la base de datos." + e.getMessage()));
+            log.info(e.getMessage());
+        }
+        return prestamo;
+    }
+    
+    public ArrayList<Prestamo> obtener() {
+        return obtener(0, 0);
+    }
+    
+    public ArrayList<Prestamo> obtener(int pagina, int cantidad) {
+        ArrayList<Prestamo> lp = null;
+        try {
+            PreparedStatement stmt = getCon()
+                    .prepareStatement("call getPrestamos()");
+            lp = rsToListaPrestamos(stmt.executeQuery());
+            close();
+        } catch (Exception e) {
+            log.warning(setError("No se logró obtener los préstamos de la base de datos."));
+            log.info(e.getMessage());
+        }
+        return lp;
     }
 
     public ArrayList<Prestamo> getPrestamosCliente(Cliente cliente) {
@@ -91,16 +135,12 @@ public class PrestamosBD extends Consultor{
         return lp;
     }
 
-    public ArrayList<Prestamo> getPrestamosPelicula(Pelicula pelicula) {
-        return getPrestamosPelicula(pelicula.getIdPelicula());
-    }
-
-    public ArrayList<Prestamo> getPrestamosPelicula(int idPelicula) {
+    public ArrayList<Prestamo> getPrestamosPelicula(String titulo) {
         ArrayList<Prestamo> lp = null;
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call getPrestamosPelicula(?)");
-            stmt.setInt(1, idPelicula);
+            stmt.setString(1, titulo);
             lp = rsToListaPrestamos(stmt.executeQuery());
             close();
         } catch (Exception e) {
@@ -175,4 +215,17 @@ public class PrestamosBD extends Consultor{
         }
         return exito;
     }
+
+    public ArrayList<Prestamo> getMoras() {
+        ArrayList<Prestamo> lp = null;
+        try {
+            PreparedStatement stmt = getCon()
+                    .prepareStatement("call getPrestamosConMora()");
+            lp = rsToListaPrestamos(stmt.executeQuery());
+            close();
+        } catch (Exception e) {
+            log.warning(setError("No se logró obtener los préstamos de la base de datos."));
+            log.info(e.getMessage());
+        }
+        return lp;}
 }

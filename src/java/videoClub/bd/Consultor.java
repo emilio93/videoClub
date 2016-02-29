@@ -71,7 +71,7 @@ public abstract class Consultor {
                 else stmt.setObject(i, p);
             }
         } catch (Exception e) {
-            log.warning(setError("No se logró crear la seentencia sql."));
+            log.warning(setError("No se logró crear la seentencia sql. " + e.getMessage()));
             log.info(e.getMessage());
         }
         return stmt;

@@ -1,0 +1,54 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<h2>
+    <span style='cursor: pointer' id='activador-listar'>
+        <i id='chev-listar' class='fa fa-chevron-circle-right'></i>
+        Lista de Préstamos
+    </span>
+</h2>
+<div id='ventana-listar'>
+    <div class='row'>
+        <div class="col-sm-6" >
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" id="prestamos-listado-todos"><a href="#">Todos</a></li>
+                <li role="presentation" id="prestamos-listado-moras"><a href="#">Moras</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <form class="form-horizontal form-sm" id="prestamos-listado-buscar-titulo" onsubmit="return false;">
+                <div class="form-group">
+                    <div class="col-sm-7">
+                        <input class="form-control input-sm" id="buscar-titulo" type="text" placeholder="Buscar por titulo de película">
+                    </div>
+                    <div class="col-sm-5">
+                        <button type="submit" class="btn btn-default btn-sm">Buscar por Película<i class="fa fa-search fa-fw"></i></button></button>
+                    </div>
+                </div>
+            </form>
+            <form class="form-horizontal form-sm" id="prestamos-listado-buscar-cedula" onsubmit="return false;">
+                <div class="form-group">
+                    <div class="col-sm-7">
+                        <input class="form-control input-sm" id="buscar-cedula" type="number" placeholder="Buscar por cédula de cliente">
+                    </div>
+                    <div class="col-sm-5">
+                        <button type="submit" class="btn btn-default btn-sm">Buscar por Cliente<i class="fa fa-search fa-fw"></i></button></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr style='margin: 5px 0 5px 0;'>
+
+    <div class='row text-center'>
+        <div class='col-sm-2'><b>Cédula</b></div>
+        <div class='col-sm-2'><b>Cliente</b></div>
+        <div class='col-sm-2'><b>Película</b></div>
+        <div class='col-sm-1'><b>Fecha de Salida</b></div>
+        <div class='col-sm-1'><b>Fecha de Devolución</b></div>
+        <div class='col-sm-4'><b>Opciones</b></div>
+    </div>
+    <hr style='margin: 5px 0 5px 0;'>
+
+    <div id="prestamos-listado">
+    </div>
+
+</div>

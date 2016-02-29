@@ -10,33 +10,38 @@
  * @param {String} chev Id del icono que indica el estado de la ventana.
  */
 var wToggle = function(activador, ventana, chev) {
-    this.activador = document.getElementById(activador);
-    this.ventana = document.getElementById(ventana);
-    this.chev = document.getElementById(chev);
 
-    // Asignar rotación del icono.
+    this.velocidad = 100;
+
+    this.activador = $(activador);
+    this.ventana = $(ventana);
+    this.chev = $(chev);
+
+    this.estado = null;
+
+    // Asignar rotación del icono, segun ethis.estado
     this.setChev = function() {
-        var faBase = "fa fa-chevron-circle-";
-        this.chev.className = this.mostrado()? faBase + "down": faBase + "right";
-    };
-    
-    // Indicar estado de la ventana.
-    this.mostrado = function() {
-        return this.ventana.style.display === "none"? false: true;
+        var faClass = 'fa fa-chevron-circle-';
+        faClass += this.estado? 'down': 'right';
+        this.chev.attr('class', faClass);
     };
 
     // Asignar el estado de la ventana.
     this.setEstado = function(mostrar) {
-        this.ventana.style.display = mostrar? "": "none";
-        this.setChev();
+        this.estado = mostrar;
+        if (this.estado) {
+            this.ventana.slideDown(this.velocidad);
+        } else {
+            this.ventana.slideUp(this.velocidad);
+        }
+        this.setChev(this.estado);
     };
 
     // Cambiar el estado de la ventana.
     this.cambiar = function() {
-        if (this.mostrado()) this.setEstado(false);
-        else this.setEstado(true);
+        this.setEstado(!this.estado);
     };
-    
+
     // Inicialmente se muestran las ventanas cerradas.
     this.setEstado(false);
 };

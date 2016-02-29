@@ -1,9 +1,12 @@
 package videoClub.sistema;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import videoClub.bd.ClientesBD;
 
 import videoClub.bd.Configuracion;
+import videoClub.bd.PeliculasBD;
 
 /**
  * Representación de un préstamos.
@@ -32,7 +35,8 @@ public class Prestamo {
         this.cliente = cliente;
         this.pelicula = pelicula;
         this.salida = LocalDate.now();
-        int dias = new Configuracion().getInt("MAX_DIAS_RENTA");
+        Configuracion c = new Configuracion();
+        int dias = c.getInt("MAX_DIAS_RENTA");
         this.devolucion = LocalDate.now().plusDays(dias);
         this.devuelta = false;
     }
@@ -53,6 +57,25 @@ public class Prestamo {
         this.devuelta = devuelta;
     }
     
+    public Prestamo(
+        int idPrestamo,
+        int idCliente,
+        int idPelicula,
+        String salida,
+        String devolucion,
+        boolean devuelta
+    ) {
+        ClientesBD cbd = new ClientesBD();
+        PeliculasBD pbd = new PeliculasBD();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.idPrestamo = idPrestamo;
+        this.cliente = cbd.obtenerConId(idCliente);
+        this.pelicula = pbd.obtener(idPelicula);
+        this.salida = LocalDate.parse(salida, formatter);
+        this.devolucion = LocalDate.parse(devolucion, formatter);
+        this.devuelta = devuelta;
+    }
+    
     public int obtenerCobro() {
         return new Configuracion().getInt("COSTO_RENTA") + obtenerCobroExtra();
     }
@@ -60,7 +83,9 @@ public class Prestamo {
     public int obtenerCobroExtra() {
         long diasExtra = getDevolucion().until(LocalDate.now(), ChronoUnit.DAYS);
         diasExtra = diasExtra > 0? diasExtra: 0;
-        return (int) (diasExtra * new Configuracion().getInt("MULTA"));
+        Configuracion c = new Configuracion();
+        int multa = c.getInt("MULTA");
+        return (int) (diasExtra * multa);
     }
 
     public int getIdPrestamo() {

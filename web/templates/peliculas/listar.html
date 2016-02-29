@@ -1,0 +1,45 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<h2>
+    <span style="cursor:pointer;" id="activador-listar">
+        <i id='chev-listar' class="fa fa-chevron-circle-right"></i>
+        Lista de Películas
+    </span>
+</h2>
+<div id="ventana-listar">
+    <div class='row'>
+        <div class="col-sm-8">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" id="peliculas-listado-todas"><a href="#">Todas</a></li>
+                <li role="presentation" id="peliculas-listado-moras"><a href="#">En Mora</a></li>
+
+            </ul>
+        </div>
+        <div class="col-sm-4 text-right">
+            <form class="form-inline" id="peliculas-listado-buscar" onsubmit="return false;">
+                <div class="form-group">
+                    <input class="form-control" id="buscar-titulo" type="text" placeholder="Buscar por Título">
+                </div>
+                <button type="submit" class="btn btn-default">Buscar <i class="fa fa-search fa-fw"></i></button></button>
+            </form>
+        </div>
+    </div>
+    <hr style='margin: 5px 0 5px 0;'>
+
+    <div >
+        <div class="row text-center">
+            <div class="col-sm-1"><b>Titulo</b></div>
+            <div class="col-sm-1"><b>Dirección</b></div>
+            <div class="col-sm-1"><b>Producción</b></div>
+            <div class="col-sm-1"><b>Año</b></div>
+            <div class="col-sm-1"><b>Género</b></div>
+            <div class="col-sm-1"><b>Duración</b></div>
+            <div class="col-sm-2"><b>Sinopsis</b></div>
+            <div class="col-sm-1"><b>Cantidad</b></div>
+            <div class="col-sm-3"><b>Opciones</b></div>
+        </div>
+        <hr style='margin: 5px 0 5px 0;'>
+
+        <div id="peliculas-listado">
+        </div>
+    </div>
+</div>
