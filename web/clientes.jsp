@@ -7,6 +7,12 @@
         <title>Clientes</title>
         <style media="screen">
             <%@ include file="/swal/sweetalert.css" %>
+            span { /* Evita sleccion en los spans */
+                -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+                -moz-user-select: none; /* mozilla browsers */
+                -khtml-user-select: none; /* webkit (konqueror) browsers */
+                -ms-user-select: none; /* IE10+ */
+            }
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -19,6 +25,7 @@
             <%@ include file="/templates/clientes/agregar.html" %>
             <hr>
             <%@ include file="/templates/clientes/listar.html" %>
+            <%@ include file="/templates/footer.jsp" %>
         </div>
     </body>
 <script>

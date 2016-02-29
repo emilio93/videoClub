@@ -133,7 +133,7 @@ HttpClientesListar = function(url, metodo, args) {
         "    <div class='col-sm-1'>" + cliente.telefono + "</div>" +
         "    <div class='col-sm-2'>" + cliente.direccion + "</div>" +
         "    <div class='col-sm-1'>" +
-        "        <button class='btn btn-info btn-sm btn-block boton-info' cedula='" + cliente.cedula + "' id='boton-info-" + cliente.idCliente + "'>" +
+        "        <button class='btn btn-info btn-sm btn-block boton-info disabled' cedula='" + cliente.cedula + "' id='boton-info-" + cliente.idCliente + "'>" +
         "            Info <i class='fa fa-info-circle'></i>" +
         "        </button>" +
         "    </div>" +
@@ -209,7 +209,7 @@ HttpClientesListar = function(url, metodo, args) {
         "<div class='col-sm-1'>" + cliente.telefono + "</div>" +
         "<div class='col-sm-2'>" + cliente.direccion + "</div>" +
         "<div class='col-sm-1'>" +
-        "    <button class='btn btn-info btn-sm btn-block boton-info' cedula='" + cliente.cedula + "' id='boton-info-" + cliente.idCliente + "'>" +
+        "    <button class='btn btn-info btn-sm btn-block boton-info disabled' cedula='" + cliente.cedula + "' id='boton-info-" + cliente.idCliente + "'>" +
         "        Info <i class='fa fa-info-circle'></i>" +
         "    </button>" +
         "</div>" +

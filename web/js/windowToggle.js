@@ -11,7 +11,7 @@
  */
 var wToggle = function(activador, ventana, chev) {
 
-    this.velocidad = 50;
+    this.velocidad = 100;
 
     this.activador = $(activador);
     this.ventana = $(ventana);
@@ -30,9 +30,9 @@ var wToggle = function(activador, ventana, chev) {
     this.setEstado = function(mostrar) {
         this.estado = mostrar;
         if (this.estado) {
-            this.ventana.show(this.velocidad);
+            this.ventana.slideDown(this.velocidad);
         } else {
-            this.ventana.hide(this.velocidad);
+            this.ventana.slideUp(this.velocidad);
         }
         this.setChev(this.estado);
     };

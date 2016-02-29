@@ -1,20 +1,18 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 $(document).ready( function() {
-    /*
-     * Window Toggle.
-     */
+    /*  Window Toggle. */
     var toggleAgregar = new wToggle('#activador-agregar', '#ventana-agregar', '#chev-agregar');
     var toggleListar = new wToggle('#activador-listar', '#ventana-listar', '#chev-listar');
     $('#activador-agregar').click( function() { toggleAgregar.cambiar(); });
     $('#activador-listar').click( function() { toggleListar.cambiar(); });
 
     /* HTTP. */
-    var httpAgregar = new HttpPeliculasAgregar('peliculas/ejecutor', 'post', {});
-    var httpListar = new HttpPeliculasListar('peliculas/ejecutor', 'get', {});
+    var httpAgregar = new HttpPrestamosAgregar('prestamos/ejecutor', 'post', {});
+    var httpListar = new HttpPrestamosListar('prestamos/ejecutor', 'get', {});
     $('#activador-listar').click( function() {
         if (toggleListar.estado) {
             httpListar.obtener();
-            $('#peliculas-listado-todas').attr('class', 'active');
+            $('#prestamos-listado-todos').attr('class', 'active');
         }
     });
     $('#form-agregar').submit( function() {
@@ -25,16 +23,16 @@ $(document).ready( function() {
         }
     });
 
-    $('#peliculas-listado-todas').click( function() {
+    $('#prestamos-listado-todos').click( function() {
         httpListar.args.params = {
             'pedido': 'obtener',
-            'conjunto': 'todas'
+            'conjunto': 'todos'
         };
         $(this).attr('class', 'active');
         $('#peliculas-listado-moras').attr('class', '');
         httpListar.obtener();
     });
-    $('#peliculas-listado-morosos').click( function() {
+    $('#prestamos-listado-moras').click( function() {
         httpListar.args.params = {
             'pedido': 'obtener',
             'conjunto': 'moras'
@@ -43,7 +41,17 @@ $(document).ready( function() {
         $('#peliculas-listado-todos').attr('class', '');
         httpListar.obtener();
     });
-    $('#peliculas-listado-buscar').submit( function() {
+    $('#prestamos-listado-buscar-cedula').submit( function() {
+        httpListar.args.params = {
+            'pedido': 'obtener',
+            'conjunto': 'cedula',
+            'cedula': $('#buscar-cedula').val()
+        };
+        $('#peliculas-listado-todas').attr('class', '');
+        $('#peliculas-listado-moras').attr('class', '');
+        httpListar.obtener();
+    });
+    $('#prestamos-listado-buscar-titulo').submit( function() {
         httpListar.args.params = {
             'pedido': 'obtener',
             'conjunto': 'titulo',
@@ -54,9 +62,6 @@ $(document).ready( function() {
         httpListar.obtener();
     });
 
-
-    /*
-     * Mostrar Contenido.
-     */
+    /* Mostrar Contenido. */
     $('body').css({'display': ''});
 });

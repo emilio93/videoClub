@@ -1,7 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-/*
- * Emilio Rojas 2016.
- */
+/* Emilio Rojas 2016. */
 HttpPrestamosAgregar = function(url, metodo, args) {
 
     this.url = url;
@@ -43,7 +41,7 @@ HttpPrestamosAgregar = function(url, metodo, args) {
 
     this.agregar = function() {
         this.args.params = this.getParams();
-        var http = new Http(this.url,this.metodo, this.args);
+        var http = new Http(this.url, this.metodo, this.args);
         if (this.validar()) {
             swal({
                 title: "Agregando Préstamo",

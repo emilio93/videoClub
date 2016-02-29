@@ -138,7 +138,7 @@ HttpPeliculasListar = function(url, metodo, args) {
         "    <div class='col-sm-2'>" + pelicula.sinopsis + "</div>" +
         "    <div class='col-sm-1'>" + pelicula.cantidad + "</div>" +
         "    <div class='col-sm-1'>" +
-        "        <button class='btn btn-info btn-sm btn-block boton-info' id='boton-info-" + pelicula.idPelicula + "'>" +
+        "        <button class='btn btn-info btn-sm btn-block boton-info disabled' id='boton-info-" + pelicula.idPelicula + "'>" +
         "            Info <i class='fa fa-info-circle'></i>" +
         "        </button>" +
         "    </div>" +
@@ -210,7 +210,7 @@ HttpPeliculasListar = function(url, metodo, args) {
         "<div class='col-sm-2'>" + pelicula.sinopsis + "</div>" +
         "<div class='col-sm-1'>" + pelicula.cantidad + "</div>" +
         "<div class='col-sm-1'>" +
-        "    <button class='btn btn-info btn-sm btn-block boton-info' titulo='" + pelicula.titulo + "' id='boton-info-" + pelicula.idPelicula + "'>" +
+        "    <button class='btn btn-info btn-sm btn-block boton-info disabled' titulo='" + pelicula.titulo + "' id='boton-info-" + pelicula.idPelicula + "'>" +
         "        Info <i class='fa fa-info-circle'></i>" +
         "    </button>" +
         "</div>" +
