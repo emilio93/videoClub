@@ -12,9 +12,12 @@
         <title>Clientes</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="${pageContext.request.contextPath}/swal/sweetalert.min.js"></script>
+        <!--
         <style>
             <%@include file="/swal/sweetalert.css" %>
         </style>
+        -->
     </head>
     <body style="display: none">
 
@@ -26,10 +29,9 @@
         </div>
     </body>
 <script>
-<%@ include file="/swal/sweetalert.min.js" %>
-<%@ include file="/js/Http.js" %>
-<%@ include file="/js/HttpClientes.js" %>
-<%@ include file="/js/windowToggle.js" %>
+<%@ include file="/js/Http.js"%>
+<%@ include file="/js/HttpClientes.js"%>
+<%@ include file="/js/windowToggle.js"%>
 
 /*
  * Window Toggle.
