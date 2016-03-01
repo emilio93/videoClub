@@ -80,7 +80,6 @@ HttpPrestamosFinalizar = function(url, metodo, args) {
                 swal('Error', 'No se ha podido calcular el cobro', 'error');
             }
         };
-        console.log(solicitante);
         httpListar.enviar(solicitante);
     };
 }
