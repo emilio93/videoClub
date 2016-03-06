@@ -74,7 +74,8 @@ HttpPrestamosListar = function(url, metodo, args) {
 
         if (this.data != null && this.data.prestamos != null) {
             for (var i = 0; i < this.data.prestamos.length; i++) {
-                html += this.construirHtmlRow(this.data.prestamos[i]);
+                if (this.data.prestamos[i].devuelta == 0)
+                    html += this.construirHtmlRow(this.data.prestamos[i]);
             }
         }
         html = html != ''?
@@ -116,6 +117,8 @@ HttpPrestamosListar = function(url, metodo, args) {
     };
 
     this.construirRow = function(prestamo) {
+        var txtFinalizar = prestamo.devuelta == 1? 'Finalizada': 'Finalizar';
+        var classFinalizar =
         html = "<div class='col-sm-2'>" + prestamo.cliente.cedula + "</div>" +
         "<div class='col-sm-2'>" + prestamo.cliente.nombre + " " + prestamo.cliente.apellido1 + " " + prestamo.cliente.apellido2 + "</div>" +
         "<div class='col-sm-2'>" + prestamo.pelicula.titulo + "</div>" +

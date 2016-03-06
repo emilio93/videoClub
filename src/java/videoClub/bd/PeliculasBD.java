@@ -3,18 +3,13 @@ package videoClub.bd;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import videoClub.log.Log;
-import java.util.logging.Level;
+import videoClub.log.Informer;
 import videoClub.sistema.Pelicula;
 
-/**
- *
- * @author Emilio Rojas
- */
 public class PeliculasBD extends Consultor{
 
     public PeliculasBD() {
-        Log.start(log);
+        inf = Informer.get();
     }
 
     private ArrayList<Pelicula> rsToListaPeliculas(ResultSet rs) {
@@ -35,8 +30,8 @@ public class PeliculasBD extends Consultor{
                 ));
             }
         } catch (Exception e) {
-            log.warning("No se logró crear la lista de peliculas.");
-            log.info(e.getMessage());
+            inf.log("No se logró crear la lista de peliculas.");
+            inf.log(e.getMessage());
         }
 
         return lp;
@@ -57,14 +52,11 @@ public class PeliculasBD extends Consultor{
                 pelicula.getCantidad()
             );
             exito = stmt.executeUpdate() == 1;
-            log.log(
-                    Level.INFO,
-                    "Agregando película a la base de datos: {0}",
-                    Boolean.toString(exito));
+            inf.log("Agregando película a la base de datos: " + Boolean.toString(exito));
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró agregar la película a la base de datos."));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró agregar la película a la base de datos."));
+            inf.log(e.getMessage());
         }
         return exito;
     }
@@ -84,7 +76,7 @@ public class PeliculasBD extends Consultor{
             lp = rsToListaPeliculas(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró leer las películas de "
+            inf.log(setError("No se logró leer las películas de "
                     + "la base de datos: " + e.getMessage()));
         }
         return lp;
@@ -112,12 +104,9 @@ public class PeliculasBD extends Consultor{
                 );
             }
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró leer la película con id "
-                    + "{0} de la base de datos: " + e.getMessage() + ". ",
-                    id);
-            log.info(e.getMessage());
+            inf.log("No se logró leer la película con id "
+                    + id + " de la base de datos: " + e.getMessage() + ". ");
+            inf.log(e.getMessage());
             setError(getError() + "No se logró leer la película con id "
                     + id + " de la base de datos: " + e.getMessage() + ". <br>");
             for (StackTraceElement stackTrace : e.getStackTrace()) {
@@ -149,12 +138,9 @@ public class PeliculasBD extends Consultor{
                 );
             }
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró leer la película con titulo "
-                    + "{0} de la base de datos: " + e.getMessage() + ". ",
-                    titulo);
-            log.info(e.getMessage());
+            inf.log("No se logró leer la película con título "
+                    + titulo +" de la base de datos: " + e.getMessage() + ". ");
+            inf.log(e.getMessage());
             setError(getError() + "No se logró leer la película con titulo "
                     + titulo + " de la base de datos: " + e.getMessage() + ". <br>");
             for (StackTraceElement stackTrace : e.getStackTrace()) {
@@ -172,17 +158,51 @@ public class PeliculasBD extends Consultor{
             lc = rsToListaPeliculas(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró obtener la lista de las películas en mora."));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró obtener la lista de las películas en mora."));
+            inf.log(e.getMessage());
         }
         return lc;
     }
 
     public boolean actualizar(Pelicula pelicula) {
-        return false;
+        boolean exito = false;
+        try {
+
+            PreparedStatement stmt = preparar(
+                "call updatePelicula(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                pelicula.getIdPelicula(),
+                pelicula.getTitulo(),
+                pelicula.getDireccion(),
+                pelicula.getProduccion(),
+                pelicula.getAno(),
+                pelicula.getGenero(),
+                pelicula.getDuracion(),
+                pelicula.getSinopsis(),
+                pelicula.getCantidad()
+            );
+            exito = stmt.executeUpdate() == 1;
+            inf.log("Actualizando película en la base de datos: " + Boolean.toString(exito));
+            close();
+        } catch (Exception e) {
+            inf.log(setError("No se logró actualizar la película en la base de datos."));
+            inf.log(e.getMessage());
+        }
+        return exito;
     }
 
     public boolean eliminar(int id) {
-        return false;
+        boolean exito = false;
+        try {
+            PreparedStatement stmt = preparar(
+                "call deletePelicula(?)", id
+            );
+            exito = stmt.executeUpdate() == 1;
+            inf.log("Borrando película de la base de datos: " + Boolean.toString(exito));
+            close();
+        } catch (Exception e) {
+            inf.log(setError("No se logró eliminad la película de la base de datos."));
+            inf.log(e.getMessage());
+        }
+        return exito;
     }
 }

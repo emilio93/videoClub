@@ -15,61 +15,70 @@ import videoClub.sistema.Pelicula;
 
 @WebServlet(name = "EjecutorPeliculas", urlPatterns = {"/peliculas/ejecutor"})
 public class EjecutorPeliculas extends HttpServlet {
+    
+    PrintWriter out;
+    String responseType;
+    String pedido;
+    boolean exito;
+    String json;
+    PeliculasBD pbd;
+    
+    public void bootstrap(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        out = response.getWriter();
+        response.setContentType("application/json; charset=utf-8");
+        pedido = request.getParameter("pedido");
+        exito = false;
+        json = "";
+        PeliculasBD pbd = new PeliculasBD();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=utf-8");
-        String pedido = request.getParameter("pedido");
+        bootstrap(request, response);
         ArrayList<Pelicula> lp = null;
-        PeliculasBD pbd = new PeliculasBD();
-        boolean exito = false;
-        if (pedido != null) {
-            switch (pedido) {
-                case "obtener":
-                    String conjunto = request.getParameter("conjunto");
-                    if (conjunto != null) {
-                        switch (conjunto) {
-                            // Obtiene las peliculas en mora.
-                            case "moras":
-                                lp = pbd.peliculasEnMora();
-                                exito = lp != null;
-                                break;
-                                
-                            // Obtiene pelicula por titulo.
-                            case "titulo":
-                                lp = new ArrayList<>();
-                                lp.add(pbd.obtener(request.getParameter("titulo")));
-                                exito = lp != null && lp.size() > 0 && lp.get(0) != null;
-                                break;
-                            
-                            // Obtiene peliculas por id.
-                            case "id":
-                                lp = new ArrayList<>();
-                                lp.add(pbd.obtener(Integer.parseInt(request.getParameter("id"))));
-                                exito = lp != null && lp.size() > 0 && lp.get(0) != null;
-                                break;
-                            
-                            // Obtiene clientes según cantidad y página.
-                            case "pagina":
-                                lp = pbd.obtener(
-                                        Integer.parseInt(request.getParameter("cantidad")), 
-                                        Integer.parseInt(request.getParameter("pagina")));
-                                exito = lp != null;
-                                break;
-                                
-                            // Obtiene todos los clientes.
-                            case "todas":
-                                lp = pbd.obtener();
-                                exito = lp != null;
-                                break;
-                        }
-                    } else {
+        if (pedido != null && pedido.equals("obtener")) {
+            String conjunto = request.getParameter("conjunto");
+            if (conjunto != null) {
+                switch (conjunto) {
+                    // Obtiene las peliculas en mora.
+                    case "moras":
+                        lp = pbd.peliculasEnMora();
+                        exito = lp != null;
+                        break;
+
+                    // Obtiene pelicula por titulo.
+                    case "titulo":
+                        lp = new ArrayList<>();
+                        lp.add(pbd.obtener(request.getParameter("titulo")));
+                        exito = lp != null && lp.size() > 0 && lp.get(0) != null;
+                        break;
+
+                    // Obtiene peliculas por id.
+                    case "id":
+                        lp = new ArrayList<>();
+                        lp.add(pbd.obtener(Integer.parseInt(request.getParameter("id"))));
+                        exito = lp != null && lp.size() > 0 && lp.get(0) != null;
+                        break;
+
+                    // Obtiene clientes según cantidad y página.
+                    case "pagina":
+                        lp = pbd.obtener(
+                                Integer.parseInt(request.getParameter("cantidad")), 
+                                Integer.parseInt(request.getParameter("pagina")));
+                        exito = lp != null;
+                        break;
+
+                    // Obtiene todos los clientes.
+                    case "todas":
                         lp = pbd.obtener();
                         exito = lp != null;
-                    }
-                    break;
+                        break;
+                }
+            } else {
+                lp = pbd.obtener();
+                exito = lp != null;
             }
         }
         Gson gs = new Gson();
@@ -84,67 +93,68 @@ public class EjecutorPeliculas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=utf-8");
-        String pedido = request.getParameter("pedido");
-        String exito = "false";
-        String json = "";
-        PeliculasBD pbd = new PeliculasBD();
+        bootstrap(request, response);
         Pelicula pelicula;
-        int id;
-        if (pedido != null) {
-            switch (pedido) {
-                case "agregar":
-                    pelicula = new Pelicula(
-                        request.getParameter("titulo"),
-                        request.getParameter("direccion"),
-                        request.getParameter("produccion"),
-                        Integer.parseInt(request.getParameter("ano")),
-                        request.getParameter("genero"),
-                        Integer.parseInt(request.getParameter("duracion")),
-                        request.getParameter("sinopsis"),
-                        Integer.parseInt(request.getParameter("cantidad"))
-                    );
-                    
-                    exito = Boolean.toString(pbd.agregar(pelicula));
-                    json = "{"
-                            + "\"success\": \"" + exito + "\", "
-                            + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
-                            + "}";
-                    break;
-                case "actualizar":
-                    pelicula = new Pelicula(
-                        Integer.parseInt(request.getParameter("id")),
-                        request.getParameter("titulo"),
-                        request.getParameter("direccion"),
-                        request.getParameter("produccion"),
-                        Integer.parseInt(request.getParameter("ano")),
-                        request.getParameter("genero"),
-                        Integer.parseInt(request.getParameter("duracion")),
-                        request.getParameter("sinopsis"),
-                        Integer.parseInt(request.getParameter("cantidad"))
-                    );
-                    exito = Boolean.toString(pbd.actualizar(pelicula));
-                    json = "{"
-                            + "\"success\": \"" + exito + "\", "
-                            + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
-                            + "}";
-                    break;
-                case "eliminar":
-                    id = Integer.parseInt(request.getParameter("id"));
-                    exito = Boolean.toString(pbd.eliminar(id));
-                    json = "{"
-                            + "\"success\": \"" + exito + "\", "
-                            + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
-                            + "}";
-                    break;
-            }
+        if (pedido != null && pedido.equals("agregar")) {
+            pelicula = new Pelicula(
+                request.getParameter("titulo"),
+                request.getParameter("direccion"),
+                request.getParameter("produccion"),
+                Integer.parseInt(request.getParameter("ano")),
+                request.getParameter("genero"),
+                Integer.parseInt(request.getParameter("duracion")),
+                request.getParameter("sinopsis"),
+                Integer.parseInt(request.getParameter("cantidad"))
+            );
+            exito = pbd.agregar(pelicula);
+            json = "{"
+                    + "\"success\": \"" + Boolean.toString(exito) + "\", "
+                    + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
+                    + "}";
         }
         out.println(json);
     }
     
     @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        bootstrap(request, response);
+        Pelicula pelicula;
+        if (pedido != null && pedido.equals("actualizar")) {
+            pelicula = new Pelicula(
+                Integer.parseInt(request.getParameter("id")),
+                request.getParameter("titulo"),
+                request.getParameter("direccion"),
+                request.getParameter("produccion"),
+                Integer.parseInt(request.getParameter("ano")),
+                request.getParameter("genero"),
+                Integer.parseInt(request.getParameter("duracion")),
+                request.getParameter("sinopsis"),
+                Integer.parseInt(request.getParameter("cantidad"))
+            );
+            exito = pbd.actualizar(pelicula);
+            json = "{"
+                    + "\"success\": \"" + Boolean.toString(exito) + "\", "
+                    + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
+                    + "}";
+        }
+        out.println(json);
+    }
+    
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        bootstrap(request, response);
+        if (pedido != null && pedido.equals("eliminar")) {
+            exito = pbd.eliminar(Integer.parseInt(request.getParameter("id")));
+            json = "{"
+                    + "\"success\": \"" + Boolean.toString(exito) + "\", "
+                    + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
+                    + "}";
+        }
+        out.println(json);
+    }
+    
     public String getServletInfo() {
         return "Realiza la interacción con la base de datos.";
     }

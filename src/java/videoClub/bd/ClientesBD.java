@@ -1,16 +1,14 @@
 package videoClub.bd;
 
 import java.sql.*;
-import java.util.logging.Level;
 import java.util.ArrayList;
 import videoClub.sistema.Cliente;
 
-import videoClub.log.Log;
+import videoClub.log.Informer;
 
 public class ClientesBD extends Consultor{
-
     public ClientesBD() {
-        Log.start(log);
+        inf = Informer.get();
     }
 
     public boolean agregar(Cliente cliente) {
@@ -27,14 +25,11 @@ public class ClientesBD extends Consultor{
                 cliente.getDireccion()
             );
             exito = stmt.executeUpdate() == 1;
-            log.log(
-                    Level.INFO,
-                    "Agregando cliente a la base de datos: {0}",
-                    Boolean.toString(exito));
+            inf.log("Agregando cliente a la base de datos: " + Boolean.toString(exito)); 
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró agregar el cliente a la base de datos: " + e.getMessage()));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró agregar el cliente a la base de datos: " + e.getMessage()));
+            inf.log(e.getMessage());
         }
         return exito;
     }
@@ -60,12 +55,10 @@ public class ClientesBD extends Consultor{
                 );
             }
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
+            inf.log(
                     "No se logró leer el cliente con id "
-                    + "{0} de la base de datos: " + e.getMessage() + ". ",
-                    id);
-            log.info(e.getMessage());
+                    +  id +" de la base de datos: " + e.getMessage() + ". ");
+            inf.log(e.getMessage());
             setError(getError() + "No se logró leer el cliente con id "
                     + id + " de la base de datos: " + e.getMessage() + ". <br>");
             for (StackTraceElement stackTrace : e.getStackTrace()) {
@@ -94,7 +87,7 @@ public class ClientesBD extends Consultor{
             lc = rsToListaClientes(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró leer los clientes de "
+            inf.log(setError("No se logró leer los clientes de "
                     + "la base de datos: " + e.getMessage()));
         }
         return lc;
@@ -108,8 +101,8 @@ public class ClientesBD extends Consultor{
             lc = rsToListaClientes(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            log.warning(setError("No se logró obtener la lista de los clientes morososs."));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró obtener la lista de los clientes morososs."));
+            inf.log(e.getMessage());
         }
         return lc;
     }
@@ -129,17 +122,11 @@ public class ClientesBD extends Consultor{
             stmt.setString(8, cliente.getDireccion());
 
             exito = stmt.executeUpdate() == 1;
-            log.log(
-                    Level.INFO,
-                    "Actualizando cliente en la base de datos: {0}",
-                    Boolean.toString(exito));
+            inf.log("Actualizando cliente en la base de datos: " + Boolean.toString(exito));
             close();
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró actualizar el cliente con cedula {0} de la base de datos.",
-                    cliente.getCedula());
-            log.info(e.getMessage());
+            inf.log("No se logró actualizar el cliente con cedula " + cliente.getCedula() + " de la base de datos.");
+            inf.log(e.getMessage());
             setError("No se logró actualizar el cliente de la base de datos. " + e.getMessage());
         }
         return exito;
@@ -155,19 +142,11 @@ public class ClientesBD extends Consultor{
             if (!exito) {
                 setError(getError() + "No se pudo eliminar el cliente de la base de datos.");
             }
-            log.log(
-                    Level.INFO,
-                    "Eliminando cliente en la base de datos: {0}",
-                    Boolean.toString(exito)
-            );
+            inf.log("Eliminando cliente en la base de datos: " + Boolean.toString(exito));
             close();
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró eliminar el cliente con id {0} de la base de datos.",
-                    id
-            );
-            log.info(e.getMessage());
+            inf.log("No se logró eliminar el cliente con id " + id + " de la base de datos.");
+            inf.log(e.getMessage());
             setError("No se logró eliminar el cliente con id "
                     + id + " de la base de datos: " + e.getMessage());
         }
@@ -183,11 +162,8 @@ public class ClientesBD extends Consultor{
             moroso = stmt.executeQuery().getInt("moroso") > 0;
             close();
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró determinar la morosidad del cliente con cedula {0}.",
-                    cedula);
-            log.info(e.getMessage());
+            inf.log("No se logró determinar la morosidad del cliente con cedula " + cedula);
+            inf.log(e.getMessage());
         }
         return moroso;
     }
@@ -201,12 +177,8 @@ public class ClientesBD extends Consultor{
             prestamos = stmt.executeQuery().getInt("prestamos");
             close();
         } catch (Exception e) {
-            log.log(
-                    Level.WARNING,
-                    "No se logró contar los prestamos del cliente con cedula {0}",
-                    cedula
-            );
-            log.info(e.getMessage());
+            inf.log("No se logró contar los prestamos del cliente con cedula " + cedula);
+            inf.log(e.getMessage());
         }
         return prestamos;
     }
@@ -222,16 +194,12 @@ public class ClientesBD extends Consultor{
                 id = rs.getInt("idCliente");
             }
             if (id <= 0) {
-                log.log(
-                        Level.WARNING,
-                        "No se encontró el cliente con cédula {0}",
-                        cedula
-                );
+                inf.log("No se encontró el cliente con cédula " + cedula);
                 setError("No se encontró el cliente con cédula " + cedula);
             }
         } catch (Exception e) {
-            log.warning(setError("No se logró crear la lista de clientes. "+ e.getMessage()));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró crear la lista de clientes. "+ e.getMessage()));
+            inf.log(e.getMessage());
         }
         return id;
     }
@@ -253,8 +221,8 @@ public class ClientesBD extends Consultor{
                 ));
             }
         } catch (Exception e) {
-            log.warning(setError("No se logró crear la lista de clientes." + e.getMessage()));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró crear la lista de clientes." + e.getMessage()));
+            inf.log(e.getMessage());
         }
 
         return lc;

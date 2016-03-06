@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `prestamoscompleto`;
 /*!50001 DROP VIEW IF EXISTS `prestamoscompleto`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `prestamoscompleto` AS SELECT 
+/*!50001 CREATE VIEW `prestamoscompleto` AS SELECT
  1 AS `idCliente`,
  1 AS `cedula`,
  1 AS `nombre`,
@@ -58,7 +58,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET character_set_results     = utf8 */;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`emilio`@`%` SQL SECURITY DEFINER */
+/*!50013 SQL SECURITY DEFINER */
 /*!50001 VIEW `prestamoscompleto` AS select `clientes`.`idCliente` AS `idCliente`,`clientes`.`cedula` AS `cedula`,`clientes`.`nombre` AS `nombre`,`clientes`.`apellido1` AS `apellido1`,`clientes`.`apellido2` AS `apellido2`,`clientes`.`telefono` AS `telefono`,`clientes`.`email` AS `email`,`peliculas`.`idPelicula` AS `idPelicula`,`peliculas`.`titulo` AS `titulo`,`peliculas`.`direccion` AS `direccion`,`peliculas`.`produccion` AS `produccion`,`peliculas`.`ano` AS `ano`,`peliculas`.`genero` AS `genero`,`peliculas`.`duracion` AS `duracion`,`peliculas`.`sinopsis` AS `sinopsis`,`peliculas`.`cantidad` AS `cantidad`,`prestamos`.`idPrestamo` AS `idPrestamo`,`prestamos`.`salida` AS `salida`,`prestamos`.`devolucion` AS `devolucion`,`prestamos`.`devuelta` AS `devuelta` from ((`prestamos` join `clientes` on((`prestamos`.`idCliente` = `clientes`.`idCliente`))) join `peliculas` on((`prestamos`.`idPelicula` = `peliculas`.`idPelicula`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -77,7 +77,7 @@ SET character_set_client = @saved_cs_client;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `addCliente`(
+CREATE PROCEDURE `addCliente`(
 	IN pcedula INT,
 	IN pnombre VARCHAR(255),
 	IN papellido1 VARCHAR(255),
@@ -105,7 +105,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `addConfiguracion`(
+CREATE PROCEDURE `addConfiguracion`(
     IN pnombre VARCHAR(255),
     IN pvalor VARCHAR(255),
     IN ptipo VARCHAR(255),
@@ -130,7 +130,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `addPelicula`(
+CREATE PROCEDURE `addPelicula`(
 	IN ptitulo VARCHAR(255),
 	IN pdireccion VARCHAR(255),
     IN pproduccion VARCHAR(255),
@@ -159,7 +159,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `addPrestamo`(
+CREATE PROCEDURE `addPrestamo`(
 	IN pidCliente INT,
     IN pidPelicula INT,
     IN psalida VARCHAR(255),
@@ -171,27 +171,27 @@ BEGIN
     DECLARE totalPeliculas INT;
     DECLARE peliculasActivas INT;
     DECLARE maximoPeliculas INT;
-    
+
     SET puedeRentar = 0;
-    
+
    	SELECT COUNT(*) FROM prestamos
     INNER JOIN clientes ON prestamos.idCliente = clientes.idCliente
     WHERE prestamos.devuelta = 0 AND prestamos.idCliente = pidCliente
     INTO rentasActivasCliente;
-    
+
     SELECT COUNT(*) FROM prestamos
     INNER JOIN peliculas ON prestamos.idPelicula = peliculas.idPelicula
     WHERE prestamos.devuelta = 0 AND prestamos.idPelicula = pidPelicula
     INTO peliculasActivas;
-    
-    SELECT cantidad FROM peliculas 
-    WHERE idPelicula = pidPelicula 
+
+    SELECT cantidad FROM peliculas
+    WHERE idPelicula = pidPelicula
     INTO totalPeliculas;
-    
-    SELECT valor FROM configuracion 
+
+    SELECT valor FROM configuracion
     WHERE nombre = 'MAX_PELICULAS_CLIENTE'
     INTO maximoPeliculas;
-    
+
     IF rentasActivasCliente < maximoPeliculas && (totalPeliculas - peliculasActivas) > 0 THEN
 		INSERT INTO prestamos(idCliente, idPelicula, salida, devolucion)
 		VALUES (pidCliente, pidPelicula, psalida, pdevolucion);
@@ -212,7 +212,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `contarPrestamosCliente`(
+CREATE PROCEDURE `contarPrestamosCliente`(
     IN pidCliente INT
 )
 BEGIN
@@ -236,7 +236,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `deleteCliente`(
+CREATE PROCEDURE `deleteCliente`(
     IN pidCliente INT
 )
 BEGIN
@@ -258,7 +258,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `deletePelicula`(
+CREATE PROCEDURE `deletePelicula`(
     IN pidPelicula INT
 )
 BEGIN
@@ -280,7 +280,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `esMoroso`(
+CREATE PROCEDURE `esMoroso`(
     IN pidCliente INT
 )
 BEGIN
@@ -308,7 +308,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `finalizarPrestamo`(
+CREATE PROCEDURE `finalizarPrestamo`(
     IN pidPrestamo INT
 )
 BEGIN
@@ -331,7 +331,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getCliente`(
+CREATE PROCEDURE `getCliente`(
     IN pidCliente INT
 )
 BEGIN
@@ -352,7 +352,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getClientes`(
+CREATE PROCEDURE `getClientes`(
     IN cant INT,
     IN pag INT
 )
@@ -394,7 +394,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getClientesMorosos`()
+CREATE PROCEDURE `getClientesMorosos`()
 BEGIN
 	-- Obtiene los clientes con mora en algún préstamo.
 	SELECT * FROM clientes
@@ -416,7 +416,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getConfiguracion`(
+CREATE PROCEDURE `getConfiguracion`(
     IN pnombre VARCHAR(255)
 )
 BEGIN
@@ -439,7 +439,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getIdFromCedula`(
+CREATE PROCEDURE `getIdFromCedula`(
     IN pcedula INT
 )
 BEGIN
@@ -460,7 +460,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getNombrePeliclas`()
+CREATE PROCEDURE `getNombrePeliclas`()
 BEGIN
 	SELECT nombre FROM peliculas;
 END ;;
@@ -479,7 +479,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getNombrePeliculas`()
+CREATE PROCEDURE `getNombrePeliculas`()
 BEGIN
 	SELECT nombre FROM peliculas;
 END ;;
@@ -498,7 +498,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPelicula`(
+CREATE PROCEDURE `getPelicula`(
     IN pidPelicula INT
 )
 BEGIN
@@ -519,7 +519,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPeliculaPorTitulo`(IN ptitulo VARCHAR(255))
+CREATE PROCEDURE `getPeliculaPorTitulo`(IN ptitulo VARCHAR(255))
 BEGIN
 	SELECT * FROM peliculas WHERE titulo=ptitulo LIMIT 1;
 END ;;
@@ -538,7 +538,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPeliculas`(
+CREATE PROCEDURE `getPeliculas`(
     IN cant INT,
     IN pag INT
 )
@@ -580,7 +580,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPeliculasEnMora`()
+CREATE PROCEDURE `getPeliculasEnMora`()
 BEGIN
 	-- Obtiene las películas con algún ejemplar en mora.
 	SELECT * FROM peliculas
@@ -603,7 +603,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPrestamo`(IN pidPrestamo INT)
+CREATE PROCEDURE `getPrestamo`(IN pidPrestamo INT)
 BEGIN
 	SELECT * FROM prestamos WHERE idPrestamo = pidPrestamo LIMIT 1;
 END ;;
@@ -622,16 +622,16 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPrestamos`()
+CREATE PROCEDURE `getPrestamos`()
 BEGIN
 		SELECT
 		prestamos.idPrestamo, prestamos.salida, prestamos.devolucion, prestamos.devuelta,
-		clientes.idCliente, clientes.cedula, clientes.nombre, clientes.apellido1, 
+		clientes.idCliente, clientes.cedula, clientes.nombre, clientes.apellido1,
         clientes.apellido2, clientes.telefono, clientes.email,
-		peliculas.idPelicula, peliculas.titulo, peliculas.direccion, peliculas.produccion, 
+		peliculas.idPelicula, peliculas.titulo, peliculas.direccion, peliculas.produccion,
         peliculas.ano
         FROM prestamos
-        
+
 		INNER JOIN clientes ON clientes.idCliente = prestamos.idCliente
         INNER JOIN peliculas ON peliculas.idPelicula = prestamos.idPelicula;
 END ;;
@@ -650,7 +650,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPrestamosCliente`(
+CREATE PROCEDURE `getPrestamosCliente`(
     IN pidCliente INT,
     pdevuelta TINYINT
 )
@@ -712,7 +712,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPrestamosClientePelicula`(
+CREATE PROCEDURE `getPrestamosClientePelicula`(
     IN pidCliente INT,
     pidPelicula INT
 )
@@ -748,7 +748,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPrestamosConMora`()
+CREATE PROCEDURE `getPrestamosConMora`()
 BEGIN
 	SELECT
 	prestamos.idPrestamo, prestamos.salida, prestamos.devolucion, prestamos.devuelta,
@@ -774,14 +774,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `getPrestamosPelicula`(
+CREATE PROCEDURE `getPrestamosPelicula`(
     IN ptitulo VARCHAR(255)
 )
 BEGIN
 
 	DECLARE pidPelicula INT;
     SELECT idPelicula FROM peliculas WHERE titulo = ptitulo LIMIT 1 INTO pidPelicula;
-    
+
 	SELECT * FROM peliculas
 	INNER JOIN prestamos ON peliculas.idPelicula = prestamos.idPelicula
     WHERE prestamos.idPelicula = pidPelicula AND prestamo.devuelta = 0;
@@ -801,7 +801,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `reactivarPrestamo`(
+CREATE PROCEDURE `reactivarPrestamo`(
     IN pidPrestamo INT
 )
 BEGIN
@@ -824,7 +824,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `updateCliente`(
+CREATE PROCEDURE `updateCliente`(
 	IN pidCliente INT,
     IN pcedula INT,
     IN pnombre VARCHAR(255),
@@ -861,7 +861,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `updateConfiguracion`(
+CREATE PROCEDURE `updateConfiguracion`(
 	IN pnombre VARCHAR(255),
     IN pvalor VARCHAR(255),
     IN ptipo VARCHAR(255),
@@ -890,7 +890,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`emilio`@`%` PROCEDURE `updatePelicula`(
+CREATE PROCEDURE `updatePelicula`(
     IN pidPelicula INT,
     IN ptitulo INT,
     IN pdireccion VARCHAR(255),

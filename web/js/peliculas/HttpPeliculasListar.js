@@ -63,7 +63,7 @@ HttpPeliculasListar = function(url, metodo, args) {
         $('.boton-eliminar').click( function() {
             var id = $(this).attr('id').replace('boton-eliminar-', '');
             var titulo = $(this).attr('titulo');
-            var httpEliminar = new HttpPeliculasEliminar('peliculas/ejecutor', 'post', {});
+            var httpEliminar = new HttpPeliculasEliminar('peliculas/ejecutor', 'delete', {});
             httpEliminar.eliminar(id, titulo);
         });
         esto.handleEditar();
@@ -86,7 +86,7 @@ HttpPeliculasListar = function(url, metodo, args) {
         $('.form-editar').submit( function() {
             var id = $(this).attr('id').replace('form-editar-', '');
             var pelicula = esto.buscarPelicula(id);
-            var httpActualizar = new HttpPeliculasActualizar('peliculas/ejecutor', 'post', {});
+            var httpActualizar = new HttpPeliculasActualizar('peliculas/ejecutor', 'put', {});
             httpActualizar.actualizar(id);
             esto.handleEditar();
         });

@@ -20,67 +20,76 @@ import videoClub.sistema.Prestamo;
 @WebServlet(name = "EjecutorPrestamos", urlPatterns = {"/prestamos/ejecutor"})
 public class EjecutorPrestamos extends HttpServlet {
 
+    PrintWriter out;
+    String responseType;
+    String pedido;
+    boolean exito;
+    String json;
+    PrestamosBD pbd;
+    
+    public void bootstrap(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        out = response.getWriter();
+        response.setContentType("application/json; charset=utf-8");
+        pedido = request.getParameter("pedido");
+        exito = false;
+        json = "";
+        PrestamosBD pbd = new PrestamosBD();
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=utf-8");
-        String pedido = request.getParameter("pedido");
+        bootstrap(request, response);
         ArrayList<Prestamo> lp = null;
-        PrestamosBD pbd = new PrestamosBD();
-        boolean exito = false;
         int cobro = 0;
-        if (pedido != null) {
-            switch (pedido) {
-                case "obtener":
-                    String conjunto = request.getParameter("conjunto");
-                    if (conjunto != null) {
-                        switch (conjunto) {
-                            // Obtiene los prestamos en mora.
-                            case "cobro":
-                                int id = Integer.parseInt(request.getParameter("id"));
-                                Prestamo prestamo = pbd.getPrestamo(id);
-                                cobro = prestamo == null? 1: prestamo.obtenerCobro();
-                                exito = cobro != 0;
-                                break;
-                            
-                            // Obtiene los prestamos en mora.
-                            case "moras":
-                                lp = pbd.getMoras();
-                                exito = lp != null;
-                                break;
-                                
-                            // Obtiene prestamos por cedula de cliente.
-                            case "cedula":
-                                lp = pbd.getPrestamosCliente(Integer.parseInt(request.getParameter("cedula")));
-                                exito = lp != null && lp.size() > 0 &&lp.get(0) != null;
-                                break;
-                             
-                            // Obtiene prestamos por cedula de cliente.
-                            case "titulo":
-                                lp = pbd.getPrestamosPelicula(request.getParameter("titulo"));
-                                exito = lp != null && lp.size() > 0 &&lp.get(0) != null;
-                                break;
-                            
-                            // Obtiene clientes según cantidad y página.
-                            case "pagina":
-                                lp = pbd.obtener(
-                                        Integer.parseInt(request.getParameter("cantidad")), 
-                                        Integer.parseInt(request.getParameter("pagina")));
-                                exito = lp != null;
-                                break;
-                                
-                            // Obtiene todos los clientes.
-                            case "todos":
-                                lp = pbd.obtener();
-                                exito = lp != null;
-                                break;
-                        }
-                    } else {
+        if (pedido != null && pedido.equals("obtener")) {
+            String conjunto = request.getParameter("conjunto");
+            if (conjunto != null) {
+                switch (conjunto) {
+                    // Obtiene los prestamos en mora.
+                    case "cobro":
+                        int id = Integer.parseInt(request.getParameter("id"));
+                        Prestamo prestamo = pbd.getPrestamo(id);
+                        cobro = prestamo == null? 1: prestamo.obtenerCobro();
+                        exito = cobro != 0;
+                        break;
+
+                    // Obtiene los prestamos en mora.
+                    case "moras":
+                        lp = pbd.getMoras();
+                        exito = lp != null;
+                        break;
+
+                    // Obtiene prestamos por cedula de cliente.
+                    case "cedula":
+                        lp = pbd.getPrestamosCliente(Integer.parseInt(request.getParameter("cedula")));
+                        exito = lp != null && lp.size() > 0 &&lp.get(0) != null;
+                        break;
+
+                    // Obtiene prestamos por cedula de cliente.
+                    case "titulo":
+                        lp = pbd.getPrestamosPelicula(request.getParameter("titulo"));
+                        exito = lp != null && lp.size() > 0 &&lp.get(0) != null;
+                        break;
+
+                    // Obtiene clientes según cantidad y página.
+                    case "pagina":
+                        lp = pbd.obtener(
+                                Integer.parseInt(request.getParameter("cantidad")), 
+                                Integer.parseInt(request.getParameter("pagina")));
+                        exito = lp != null;
+                        break;
+
+                    // Obtiene todos los clientes.
+                    case "todos":
                         lp = pbd.obtener();
                         exito = lp != null;
-                    }
-                    break;
+                        break;
+                }
+            } else {
+                lp = pbd.obtener();
+                exito = lp != null;
             }
         }
         Gson gs = new Gson();
@@ -98,20 +107,13 @@ public class EjecutorPrestamos extends HttpServlet {
                 + "\"cobro\": " + cobro
                 + "}");
         }
-                
 
     }
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=utf-8");
-        String pedido = request.getParameter("pedido");
-        String exito = "false";
-        String json = "";
-        PrestamosBD pbd = new PrestamosBD();
+        bootstrap(request, response);
         Prestamo prestamo;
         int id;
         if (pedido != null) {
@@ -122,7 +124,7 @@ public class EjecutorPrestamos extends HttpServlet {
                     PeliculasBD pelbd = new PeliculasBD();
                     Pelicula p = pelbd.obtener(request.getParameter("titulo"));
                     prestamo = new Prestamo(c, p);
-                    exito = Boolean.toString(pbd.agregar(prestamo));
+                    exito = pbd.agregar(prestamo);
                     json = "{"
                             + "\"success\": \"" + exito + "\", "
                             + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
@@ -130,7 +132,7 @@ public class EjecutorPrestamos extends HttpServlet {
                     break;
                 case "finalizar":
                     id = Integer.parseInt(request.getParameter("id"));
-                    exito = Boolean.toString(pbd.finalizarPrestamo(id));
+                    exito = pbd.finalizarPrestamo(id);
                     json = "{"
                             + "\"success\": \"" + exito + "\", "
                             + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""

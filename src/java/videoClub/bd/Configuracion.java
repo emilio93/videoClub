@@ -3,7 +3,7 @@ package videoClub.bd;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.logging.Level;
-import videoClub.log.Log;
+import videoClub.log.Informer;
 
 /**
  * Se encarga de manejar los datos de configuración para el sistema.
@@ -12,12 +12,12 @@ import videoClub.log.Log;
  * @author Emilio Rojas.
  */
 public class Configuracion extends Consultor{
-
+    
     /**
      * Inicializa el Logger.
      */
     public Configuracion() {
-        Log.start(log);
+        inf = Informer.get();
     }
 
     /**
@@ -31,11 +31,7 @@ public class Configuracion extends Consultor{
             rs = stmt.executeQuery();
             if (rs.next()) valor = Integer.parseInt(rs.getString("valor"));
         } catch (Exception e) {
-            log.log(
-                Level.WARNING,
-                "No se logró leer la configuración solicitada: {0}",
-                e.getMessage()
-            );
+            inf.log("No se logró leer la configuración solicitada: " + e.getMessage());
             setError("No se logró leer la configuración solicitada: " +
                     e.getMessage());
             for (StackTraceElement stackTrace : e.getStackTrace()) {
@@ -55,13 +51,7 @@ public class Configuracion extends Consultor{
             PreparedStatement stmt = preparar("call getConfiguracion(?)", nombre);
             rs = stmt.executeQuery();
         } catch (Exception e) {
-            log.log(
-                Level.WARNING,
-                "No se logró leer la configuración solicitada: {0}",
-                e.getMessage()
-            );
-            setError("No se logró leer la configuración solicitada: " +
-                    e.getMessage());
+            inf.log(setError("No se logró leer la configuración solicitada: " + e.getMessage()));
             for (StackTraceElement stackTrace : e.getStackTrace()) {
                 setError(getError() + stackTrace + "<br>");
             }
@@ -69,16 +59,7 @@ public class Configuracion extends Consultor{
         try {
             if (rs.next()) valor = rs.getString("valor");
         } catch (Exception e) {
-            log.log(
-                Level.WARNING,
-                "No se logró leer la configuración solicitada: {0}",
-                e.getMessage()
-            );
-            setError("No se logró leer la configuración solicitada: " +
-                    e.getMessage());
-            for (StackTraceElement stackTrace : e.getStackTrace()) {
-                setError(getError() + stackTrace + "<br>");
-            }
+            inf.log(setError("No se logró leer la configuración solicitada: " + e.getMessage()));
         }
         return valor;
     }
@@ -93,30 +74,12 @@ public class Configuracion extends Consultor{
             PreparedStatement stmt = preparar("call getConfiguracion(?)", nombre);
             rs = stmt.executeQuery();
         } catch (Exception e) {
-            log.log(
-                Level.WARNING,
-                "No se logró leer la configuración solicitada: {0}",
-                e.getMessage()
-            );
-            setError("No se logró leer la configuración solicitada: " +
-                    e.getMessage());
-            for (StackTraceElement stackTrace : e.getStackTrace()) {
-                setError(getError() + stackTrace + "<br>");
-            }
+            inf.log(setError("No se logró leer la configuración solicitada: " + e.getMessage()));
         }
         try {
             if (rs.next()) descripcion = rs.getString("descripcion");
         } catch (Exception e) {
-            log.log(
-                Level.WARNING,
-                "No se logró leer la configuración solicitada: {0}",
-                e.getMessage()
-            );
-            setError("No se logró leer la configuración solicitada: " +
-                    e.getMessage());
-            for (StackTraceElement stackTrace : e.getStackTrace()) {
-                setError(getError() + stackTrace + "<br>");
-            }
+            inf.log(setError("No se logró leer la configuración solicitada: " + e.getMessage()));
         }
         return descripcion;
     }
@@ -131,16 +94,7 @@ public class Configuracion extends Consultor{
             PreparedStatement stmt = preparar("call getConfiguracion(?)", nombre);
             rs = stmt.executeQuery();
         } catch (Exception e) {
-            log.log(
-                Level.WARNING,
-                "No se logró leer la configuración solicitada: {0}",
-                e.getMessage()
-            );
-            setError("No se logró leer la configuración solicitada: " +
-                    e.getMessage());
-            for (StackTraceElement stackTrace : e.getStackTrace()) {
-                setError(getError() + stackTrace + "<br>");
-            }
+            inf.log(setError("No se logró leer la configuración solicitada: " + e.getMessage()));
         }
         return rs;
     }

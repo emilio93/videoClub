@@ -1,12 +1,21 @@
+<%@page import="java.time.LocalDate"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%
+    LocalDate date = LocalDate.now();
+    String dia = Integer.toString(date.getDayOfMonth());
+    String mes = Integer.toString(date.getMonthValue());
+    String ano = Integer.toString(date.getYear());
+%>
 <script>
     $(document).ready( function() {
+        /*
         var d = new Date();
         var dia = d.getDate();
         var mes = d.getMonth() + 1;
         var ano = d.getFullYear();
+        */
 
-        var fecha = dia + '/' + mes + '/' + ano;
+        var fecha = <%=dia%> + '/' + <%=mes%> + '/' + <%=ano%>;
         $('footer')
         .html('Fecha del sistema: ' + fecha)
         .attr('class','text-center')

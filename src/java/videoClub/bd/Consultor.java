@@ -2,7 +2,7 @@ package videoClub.bd;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.logging.Logger;
+import videoClub.log.Informer;
 
 /**
  * Un consultor es una entidad encargada de realizar consultas a la base de
@@ -11,9 +11,9 @@ import java.util.logging.Logger;
  * @author Emilio Rojas
  */
 public abstract class Consultor {
-    protected static final Logger log = Logger.getLogger(ClientesBD.class.getName());
     protected Connection con = null;
     private String error;
+    protected Informer inf;
 
     /**
      * Obtiene el string de error al instante solicitado.
@@ -71,8 +71,8 @@ public abstract class Consultor {
                 else stmt.setObject(i, p);
             }
         } catch (Exception e) {
-            log.warning(setError("No se logró crear la seentencia sql. " + e.getMessage()));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró crear la seentencia sql. " + e.getMessage()));
+            inf.log(e.getMessage());
         }
         return stmt;
     }
@@ -87,8 +87,8 @@ public abstract class Consultor {
             con.close();
             r = true;
         } catch (Exception e) {
-            log.warning(setError("No se logró cerrar la conexión con la base de datos."));
-            log.info(e.getMessage());
+            inf.log(setError("No se logró cerrar la conexión con la base de datos."));
+            inf.log(e.getMessage());
         }
         return r;
     }

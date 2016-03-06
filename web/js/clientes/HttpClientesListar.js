@@ -58,7 +58,7 @@ HttpClientesListar = function(url, metodo, args) {
             $('.boton-eliminar').click( function() {
                 var id = $(this).attr('id').replace('boton-eliminar-', '');
                 var cedula = $(this).attr('cedula');
-                var httpEliminar = new HttpClientesEliminar('clientes/ejecutor', 'post', {});
+                var httpEliminar = new HttpClientesEliminar('clientes/ejecutor', 'delete', {});
                 httpEliminar.eliminar(id, cedula);
             });
             this.handleEditar();
@@ -82,7 +82,7 @@ HttpClientesListar = function(url, metodo, args) {
         $('.form-editar').submit( function() {
             var id = $(this).attr('id').replace('form-editar-', '');
             var cliente = esto.buscarCliente(id);
-            var httpActualizar = new HttpClientesActualizar('clientes/ejecutor', 'post', {});
+            var httpActualizar = new HttpClientesActualizar('clientes/ejecutor', 'put', {});
             httpActualizar.actualizar(id);
             esto.handleEditar();
         });

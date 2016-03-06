@@ -29,7 +29,7 @@ $(document).ready( function() {
             'conjunto': 'todos'
         };
         $(this).attr('class', 'active');
-        $('#peliculas-listado-moras').attr('class', '');
+        $('#prestamos-listado-moras').attr('class', '');
         httpListar.obtener();
     });
     $('#prestamos-listado-moras').click( function() {

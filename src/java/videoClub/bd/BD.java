@@ -1,33 +1,31 @@
 package videoClub.bd;
 
-import java.sql.*;
-import java.util.Properties;
-import java.io.InputStream;
-import java.util.logging.Logger;
 
-import videoClub.log.Log;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Properties;
+import videoClub.log.Informer;
 
 /**
  * Maneja la conexión con la base de datos.
  * @author Emilio Rojas
  */
 public final class BD {
-    private static final Logger log = Logger.getLogger(BD.class.getName());
-
     private Connection con;
     private Properties config;
     private String url;
     private String user;
     private String pass;
     private String error;
-
+    
+    private Informer inf;
     /**
     * Inicia un objeto BD con o sin conexión establecida según el parámetro
     * <pre>conectar</pre>.
     * @param conectar True para crear la conexión, false para no crearla.
     */
     public BD(boolean conectar) {
-        Log.start(log);
+        inf = Informer.get();
         if (conectar) conectar();
     }
 
@@ -66,7 +64,7 @@ public final class BD {
         */
 
         String driver = "jdbc:mysql://"; // conf.getProperty("db.driver");
-        String host = "localhost"; // conf.getProperty("db.host");
+        String host = "127.0.0.1"; // conf.getProperty("db.host");
         String port = "3306"; // conf.getProperty("db.port");
         String name = "videoclub"; // conf.getProperty("db.name");
         user = "emilio"; // conf.getProperty("db.user");
@@ -83,12 +81,11 @@ public final class BD {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             con = DriverManager.getConnection(url, user, pass);
-            log.info("Conexión con la bse de datos creada.");
-            error = "Conexion creada";
+            inf.log("Conexión con la bse de datos creada.", Informer.LVL_DEBUG);
         } catch (Exception e) {
-            log.warning("No se logró conectar a la base de datos.");
-            log.info(e.getMessage());
-            error = "Conexion no creada" + e.getMessage();
+            inf.log("No se logró conectar a la base de datos.", Informer.LVL_WARNING);
+            inf.log(e.getMessage(), Informer.LVL_ERROR);
+            error = "Conexión no creada" + e.getMessage();
         }
         return con;
     }
