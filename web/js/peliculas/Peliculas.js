@@ -14,12 +14,11 @@ $(document).ready( function() {
     $('#activador-listar').click( function() {
         if (toggleListar.estado) {
             httpListar.obtener();
-            $('#peliculas-listado-todas').attr('class', 'active');
         }
     });
     $('#form-agregar').submit( function() {
         httpAgregar.agregar();
-        if (toggleListar.estado) {
+        if (toggleListar.estado && httpAgregar.status) {
             $('#activador-listar').click();
             $('#activador-listar').click();
         }
@@ -34,13 +33,13 @@ $(document).ready( function() {
         $('#peliculas-listado-moras').attr('class', '');
         httpListar.obtener();
     });
-    $('#peliculas-listado-morosos').click( function() {
+    $('#peliculas-listado-moras').click( function() {
         httpListar.args.params = {
             'pedido': 'obtener',
             'conjunto': 'moras'
         };
         $(this).attr('class', 'active');
-        $('#peliculas-listado-todos').attr('class', '');
+        $('#peliculas-listado-todas').attr('class', '');
         httpListar.obtener();
     });
     $('#peliculas-listado-buscar').submit( function() {

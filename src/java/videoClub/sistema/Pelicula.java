@@ -46,7 +46,7 @@ public class Pelicula {
             String produccion, 
             int ano, 
             String genero, 
-            int duración, 
+            int duracion, 
             String sinopsis, 
             int cantidad
     ) {

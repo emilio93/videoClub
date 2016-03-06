@@ -138,9 +138,12 @@ public class ClientesBD extends Consultor{
             PreparedStatement stmt = getCon()
                     .prepareStatement("call deleteCliente(?)");
             stmt.setInt(1, id);
-            exito = stmt.executeUpdate() >= 1;
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                exito = rs.getInt("eliminado") >= 1;
+            }
             if (!exito) {
-                setError(getError() + "No se pudo eliminar el cliente de la base de datos.");
+                setError("No se pudo eliminar el cliente de la base de datos. " + getError());
             }
             inf.log("Eliminando cliente en la base de datos: " + Boolean.toString(exito));
             close();

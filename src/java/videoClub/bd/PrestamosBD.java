@@ -93,7 +93,7 @@ public class PrestamosBD extends Consultor{
             }
             close();
         } catch (Exception e) {
-            inf.log(setError("No se logró obtener el préstamo de la base de datos." + e.getMessage()));
+            inf.log(setError("No se logró obtener el préstamo de la base de datos. " + e.getMessage()));
             inf.log(e.getMessage());
         }
         return prestamo;
@@ -118,19 +118,19 @@ public class PrestamosBD extends Consultor{
     }
 
     public ArrayList<Prestamo> getPrestamosCliente(Cliente cliente) {
-        return getPrestamosCliente(cliente.getIdCliente());
+        return getPrestamosCliente(cliente.getCedula());
     }
 
-    public ArrayList<Prestamo> getPrestamosCliente(int idCliente) {
+    public ArrayList<Prestamo> getPrestamosCliente(int cedula) {
         ArrayList<Prestamo> lp = null;
         try {
             PreparedStatement stmt = getCon()
                     .prepareStatement("call getPrestamosCliente(?)");
-            stmt.setInt(1, idCliente);
+            stmt.setInt(1, cedula);
             lp = rsToListaPrestamos(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            inf.log(setError("No se logró obtener los préstamos de la base de datos."));
+            inf.log(setError("No se logró obtener los préstamos de la base de datos. " + e.getMessage()));
             inf.log(e.getMessage());
         }
         return lp;
@@ -145,7 +145,7 @@ public class PrestamosBD extends Consultor{
             lp = rsToListaPrestamos(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            inf.log(setError("No se logró obtener los préstamos de la base de datos."));
+            inf.log(setError("No se logró obtener los préstamos de la base de datos. " + e.getMessage()));
             inf.log(e.getMessage());
         }
         return lp;
@@ -219,7 +219,7 @@ public class PrestamosBD extends Consultor{
             lp = rsToListaPrestamos(stmt.executeQuery());
             close();
         } catch (Exception e) {
-            inf.log(setError("No se logró obtener los préstamos de la base de datos."));
+            inf.log(setError("No se logró obtener los préstamos de la base de datos. " + e.getMessage()));
             inf.log(e.getMessage());
         }
         return lp;

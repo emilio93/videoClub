@@ -9,8 +9,8 @@ HttpPrestamosFinalizar = function(url, metodo, args) {
     this.data = null;
 
     this.ejecutar = function(data) {
-        if (data.success == 'true') {
-            swal('¡Éxito!', 'Se finalizó el présatamo.', 'success');
+        if (data.success === 'true') {
+            swal('¡Éxito!', 'Se finalizó el préstamo.', 'success');
             $('#activador-listar').click();
             $('#activador-listar').click();
         } else {

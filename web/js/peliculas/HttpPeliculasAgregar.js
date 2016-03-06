@@ -7,6 +7,7 @@ HttpPeliculasAgregar = function(url, metodo, args) {
     this.url = url;
     this.metodo = metodo;
     this.args = args;
+    this.status = false;
 
     /**
      * Esto es lo que hace el solicitante al obtener una respuesta correcta del
@@ -24,6 +25,7 @@ HttpPeliculasAgregar = function(url, metodo, args) {
             $('#duracion').val('');
             $('#cantidad').val('');
             $('#sinopsis').val('');
+            this.status = true;
         } else {
             swal('Error', 'No se ha añadido la película a la base de datos.', 'error');
         }

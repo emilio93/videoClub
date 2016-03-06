@@ -14,12 +14,11 @@ $(document).ready( function() {
     $('#activador-listar').click( function() {
         if (toggleListar.estado) {
             httpListar.obtener();
-            $('#clientes-listado-todos').attr('class', 'active');
         }
     });
     $('#form-agregar').submit( function() {
         httpAgregar.agregar();
-        if (toggleListar.estado) {
+        if (toggleListar.estado && httpAgregar.status) {
             $('#activador-listar').click();
             $('#activador-listar').click();
         }

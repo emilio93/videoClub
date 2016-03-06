@@ -94,69 +94,50 @@ public class EjecutorClientes extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         bootstrap(request, response);
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=utf-8");
-        String pedido = request.getParameter("pedido");
-        String exito = "false";
-        String json = "";
-        ClientesBD cbd = new ClientesBD();
         Cliente cliente;
         int id;
-        if (pedido != null && pedido.equals("agregar")) {
-            cliente = new Cliente(
-                Integer.parseInt(request.getParameter("cedula")),
-                request.getParameter("nombre"),
-                request.getParameter("apellido1"),
-                request.getParameter("apellido2"),
-                Integer.parseInt(request.getParameter("telefono")),
-                request.getParameter("email"),
-                request.getParameter("direccion")
-            );
+        switch (pedido) {
+            case "agregar":
+                cliente = new Cliente(
+                    Integer.parseInt(request.getParameter("cedula")),
+                    request.getParameter("nombre"),
+                    request.getParameter("apellido1"),
+                    request.getParameter("apellido2"),
+                    Integer.parseInt(request.getParameter("telefono")),
+                    request.getParameter("email"),
+                    request.getParameter("direccion")
+                );
 
-            exito = Boolean.toString(cbd.agregar(cliente));
-            json = "{" + 
-                    "\"success\": \"" + exito + "\", " + 
-                    "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\"" + 
-                    "}";
-        }
-        out.println(json);
-    }
-    
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        bootstrap(request, response);
-        Cliente cliente;
-        if (pedido != null && pedido.equals("actualizar")) {
-            cliente = new Cliente(
-                Integer.parseInt(request.getParameter("id")),
-                Integer.parseInt(request.getParameter("cedula")),
-                request.getParameter("nombre"),
-                request.getParameter("apellido1"),
-                request.getParameter("apellido2"),
-                Integer.parseInt(request.getParameter("telefono")),
-                request.getParameter("email"),
-                request.getParameter("direccion")
-            );
-            exito = cbd.actualizar(cliente);
-            json = "{"
-                    + "\"success\": \"" + Boolean.toString(exito) + "\", "
-                    + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
-                    + "}";
-        }
-        out.println(json);
-    }
-    
-    @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        bootstrap(request, response);
-        if (pedido != null && pedido.equals("eliminar")) {
-            exito = cbd.eliminar(Integer.parseInt(request.getParameter("id")));
-            json = "{"
-                    + "\"success\": \"" + Boolean.toString(exito) + "\", "
-                    + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
-                    + "}";
+                exito = cbd.agregar(cliente);
+                json = "{" + 
+                        "\"success\": \"" + exito + "\", " + 
+                        "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\"" + 
+                        "}";
+                break;
+            case "actualizar":
+                cliente = new Cliente(
+                    Integer.parseInt(request.getParameter("id")),
+                    Integer.parseInt(request.getParameter("cedula")),
+                    request.getParameter("nombre"),
+                    request.getParameter("apellido1"),
+                    request.getParameter("apellido2"),
+                    Integer.parseInt(request.getParameter("telefono")),
+                    request.getParameter("email"),
+                    request.getParameter("direccion")
+                );
+                exito = cbd.actualizar(cliente);
+                json = "{"
+                        + "\"success\": \"" + exito + "\", "
+                        + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
+                        + "}";
+                break;
+            case "eliminar":
+                exito = cbd.eliminar(Integer.parseInt(request.getParameter("id")));
+                json = "{"
+                        + "\"success\": \"" + Boolean.toString(exito) + "\", "
+                        + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
+                        + "}";
+                break;
         }
         out.println(json);
     }
@@ -165,7 +146,4 @@ public class EjecutorClientes extends HttpServlet {
     public String getServletInfo() {
         return "Realiza la interacción con la base de datos.";
     }
-    
-    
-
 }

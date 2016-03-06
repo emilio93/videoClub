@@ -27,7 +27,7 @@ HttpPeliculasEliminar = function(url, metodo, args) {
         var http = new Http(this.url, this.metodo, this.args);
         var esto = this;
         swal({
-            title: "Eliminar Cliente",
+            title: "Eliminar Película",
             text: "Se eliminará la película " + titulo + ".",
             type: "warning",
             showCancelButton: true,

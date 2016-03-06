@@ -53,8 +53,12 @@ public class EjecutorPrestamos extends HttpServlet {
                         Prestamo prestamo = pbd.getPrestamo(id);
                         cobro = prestamo == null? 1: prestamo.obtenerCobro();
                         exito = cobro != 0;
+                        out.println("{"
+                            + "\"success\": \"" + Boolean.toString(exito) + "\","
+                            + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\","
+                            + "\"cobro\": " + cobro
+                            + "}");
                         break;
-
                     // Obtiene los prestamos en mora.
                     case "moras":
                         lp = pbd.getMoras();
@@ -64,13 +68,13 @@ public class EjecutorPrestamos extends HttpServlet {
                     // Obtiene prestamos por cedula de cliente.
                     case "cedula":
                         lp = pbd.getPrestamosCliente(Integer.parseInt(request.getParameter("cedula")));
-                        exito = lp != null && lp.size() > 0 &&lp.get(0) != null;
+                        exito = lp != null && lp.size() > 0 && lp.get(0) != null;
                         break;
 
                     // Obtiene prestamos por cedula de cliente.
                     case "titulo":
                         lp = pbd.getPrestamosPelicula(request.getParameter("titulo"));
-                        exito = lp != null && lp.size() > 0 &&lp.get(0) != null;
+                        exito = lp != null && lp.size() > 0 && lp.get(0) != null;
                         break;
 
                     // Obtiene clientes según cantidad y página.
@@ -99,12 +103,6 @@ public class EjecutorPrestamos extends HttpServlet {
                 + "\"success\": \"" + Boolean.toString(exito) + "\","
                 + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\","
                 + "\"prestamos\": " + prestamos
-                + "}");
-        } else {
-            out.println("{"
-                + "\"success\": \"" + Boolean.toString(exito) + "\","
-                + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\","
-                + "\"cobro\": " + cobro
                 + "}");
         }
 

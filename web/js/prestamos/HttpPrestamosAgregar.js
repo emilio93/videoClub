@@ -5,6 +5,7 @@ HttpPrestamosAgregar = function(url, metodo, args) {
     this.url = url;
     this.metodo = metodo;
     this.args = args;
+    this.status = false;
 
     /**
      * Esto es lo que hace el solicitante al obtener una respuesta correcta del
@@ -16,6 +17,7 @@ HttpPrestamosAgregar = function(url, metodo, args) {
             swal('¡Éxito!', 'Se añadió el préstamo a la base de datos.', 'success');
             $('#cedula').val('');
             $('#titulo').val('');
+            this.status = true;
         } else {
             swal('Error', 'No se ha añadido el préstamo a la base de datos.', 'error');
         }

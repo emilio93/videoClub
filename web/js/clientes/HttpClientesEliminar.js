@@ -1,7 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-/*
- * Emilio Rojas 2016.
- */
+/* Emilio Rojas 2016. */
 HttpClientesEliminar = function(url, metodo, args) {
     this.url = url;
     this.metodo = metodo;

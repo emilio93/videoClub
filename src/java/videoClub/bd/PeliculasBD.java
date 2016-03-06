@@ -184,19 +184,25 @@ public class PeliculasBD extends Consultor{
             inf.log("Actualizando película en la base de datos: " + Boolean.toString(exito));
             close();
         } catch (Exception e) {
-            inf.log(setError("No se logró actualizar la película en la base de datos."));
+            inf.log(setError("No se logró actualizar la película en la base de datos." + e.getMessage()));
             inf.log(e.getMessage());
         }
         return exito;
     }
 
     public boolean eliminar(int id) {
-        boolean exito = false;
+                boolean exito = false;
         try {
             PreparedStatement stmt = preparar(
                 "call deletePelicula(?)", id
             );
-            exito = stmt.executeUpdate() == 1;
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                exito = rs.getInt("eliminado") >= 1;
+            }
+            if (!exito) {
+                setError("No se pudo eliminar el cliente de la base de datos. " + getError());
+            }
             inf.log("Borrando película de la base de datos: " + Boolean.toString(exito));
             close();
         } catch (Exception e) {

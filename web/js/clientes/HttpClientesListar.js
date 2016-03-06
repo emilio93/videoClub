@@ -1,7 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-/*
- * Emilio Rojas 2016.
- */
+/* Emilio Rojas 2016. */
 HttpClientesListar = function(url, metodo, args) {
 
     this.url = url;
@@ -55,13 +53,8 @@ HttpClientesListar = function(url, metodo, args) {
         var esto = this;
         if (nuevoTexto != viejoTexto) {
             $('#clientes-listado').html(nuevoTexto);
-            $('.boton-eliminar').click( function() {
-                var id = $(this).attr('id').replace('boton-eliminar-', '');
-                var cedula = $(this).attr('cedula');
-                var httpEliminar = new HttpClientesEliminar('clientes/ejecutor', 'delete', {});
-                httpEliminar.eliminar(id, cedula);
-            });
             this.handleEditar();
+            this.handleEliminar();
         };
     };
 
@@ -77,12 +70,26 @@ HttpClientesListar = function(url, metodo, args) {
         });
     };
 
+    this.handleEliminar = function() {
+        var esto = this;
+        $('.boton-eliminar').click( function() {
+            var id = $(this).attr('id').replace('boton-eliminar-', '');
+            var cedula = $(this).attr('cedula');
+            var cliente = esto.buscarCliente(id);
+            var httpEliminar = new HttpClientesEliminar('clientes/ejecutor', 'post', {});
+            httpEliminar.eliminar(id, cedula);
+            $('#row-' + id).html(esto.construirRow(cliente));
+            esto.actualizar();
+        });
+    };
+
     this.handleGuardar = function() {
         var esto = this;
         $('.form-editar').submit( function() {
+            console.log("form sent with id: " + $(this).attr('id').replace('form-editar-', ''));
             var id = $(this).attr('id').replace('form-editar-', '');
             var cliente = esto.buscarCliente(id);
-            var httpActualizar = new HttpClientesActualizar('clientes/ejecutor', 'put', {});
+            var httpActualizar = new HttpClientesActualizar('clientes/ejecutor', 'post', {});
             httpActualizar.actualizar(id);
             esto.handleEditar();
         });
@@ -96,6 +103,7 @@ HttpClientesListar = function(url, metodo, args) {
             var cliente = esto.buscarCliente(id);
             $('#row-' + id).html(esto.construirRow(cliente));
             esto.handleEditar();
+            esto.handleEliminar();
         });
     };
 

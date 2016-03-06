@@ -94,6 +94,11 @@ HttpPrestamosListar = function(url, metodo, args) {
     };
 
     this.construirHtmlRow = function(prestamo) {
+
+        var dPrestamo = new Date(prestamo.devolucion.year, prestamo.devolucion.month-1, prestamo.devolucion.day);
+        var hoy = new Date();
+        var estilo = dPrestamo > hoy? 'primary': 'danger';
+
         html =  "<div id='row-" + prestamo.idPrestamo + "' class='row text-center'>" +
         "   <div class='col-sm-2'>" + prestamo.cliente.cedula + "</div>" +
         "   <div class='col-sm-2'>" + prestamo.cliente.nombre + " " + prestamo.cliente.apellido1 + " " + prestamo.cliente.apellido2 + "</div>" +
@@ -106,12 +111,14 @@ HttpPrestamosListar = function(url, metodo, args) {
         "        </button>" +
         "   </div>" +
         "   <div class='col-sm-2'>" +
-        "        <button class='btn btn-primary btn-sm btn-block boton-finalizar' titulo='" + prestamo.pelicula.titulo + "' cedula='" + prestamo.cliente.cedula + "' id='boton-finalizar-" + prestamo.idPrestamo + "'>" +
+        "        <button class='btn btn-" + estilo + " btn-sm btn-block boton-finalizar' titulo='" + prestamo.pelicula.titulo + "' cedula='" + prestamo.cliente.cedula + "' id='boton-finalizar-" + prestamo.idPrestamo + "'>" +
         "           Finalizar <i class='fa fa-check'></i>" +
         "        </button>" +
         "    </div>" +
         "</div>" +
         "<hr style='margin: 5px 0 5px 0;'>";
+
+
 
         return html;
     };
