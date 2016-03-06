@@ -34,7 +34,7 @@ public class EjecutorPrestamos extends HttpServlet {
         pedido = request.getParameter("pedido");
         exito = false;
         json = "";
-        PrestamosBD pbd = new PrestamosBD();
+        pbd = new PrestamosBD();
     }
     
     @Override

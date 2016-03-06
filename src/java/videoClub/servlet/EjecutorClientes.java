@@ -30,7 +30,7 @@ public class EjecutorClientes extends HttpServlet {
         pedido = request.getParameter("pedido");
         exito = false;
         json = "";
-        ClientesBD cbd = new ClientesBD();
+        cbd = new ClientesBD();
     }
     
     @Override

@@ -30,7 +30,7 @@ public class EjecutorPeliculas extends HttpServlet {
         pedido = request.getParameter("pedido");
         exito = false;
         json = "";
-        PeliculasBD pbd = new PeliculasBD();
+        pbd = new PeliculasBD();
     }
 
     @Override
