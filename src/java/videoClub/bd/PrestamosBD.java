@@ -58,12 +58,14 @@ public class PrestamosBD extends Consultor{
             stmt.setString(3, prestamo.getSalida().toString());
             stmt.setString(4, prestamo.getDevolucion().toString());
             ResultSet rs = stmt.executeQuery();
-            exito = rs.getInt("agregado") == 1;
+            if(rs.next()) {
+                exito = rs.getInt("agregado") == 1;
+            }
             if (!exito) setError( getError() + " No se pudo agregar el préstamo.");
             inf.log("Agregando préstamo a la base de datos: " + Boolean.toString(exito));
             close();
         } catch (Exception e) {
-            inf.log(setError("No se logró agregar el préstamo a la base de datos."));
+            inf.log(setError("No se logró agregar el préstamo a la base de datos. " + e.getMessage()));
             inf.log(e.getMessage());
         }
         return exito;

@@ -3,6 +3,7 @@ package videoClub.servlet;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -125,7 +126,7 @@ public class EjecutorPrestamos extends HttpServlet {
                     exito = pbd.agregar(prestamo);
                     json = "{"
                             + "\"success\": \"" + Boolean.toString(exito) + "\", "
-                            + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
+                            + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
                             + "}";
                     break;
                 case "finalizar":

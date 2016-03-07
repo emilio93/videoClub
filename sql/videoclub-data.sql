@@ -35,7 +35,7 @@ CREATE TABLE `clientes` (
   UNIQUE KEY `uqCedula` (`cedula`),
   UNIQUE KEY `uqEmail` (`email`),
   UNIQUE KEY `uqTelefono` (`telefono`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (15,123,'ana','calderon','ugalde','12345','ana@calderon.net','direccion de ana'),(16,1234,'pedro','bolaños','cortez','22334455','pedro@ejemplo.com','direccion de pedro'),(18,12345,'juan','castro','blanco','11122233','juan@castro.com','direccion de juan');
+INSERT INTO `clientes` VALUES (15,123,'ana','calderon','ugalde','12345','ana@calderon.net','direccion de ana'),(16,1234,'pedro','bolaños','cortez','22334455','pedro@ejemplo.com','direccion de pedro'),(18,12345,'juan','castro','blanco','11122233','juan@castro.com','direccion de juan'),(19,12,'maria','rojas','quesada','665544','maria@rojas.com','direccion de maria');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,7 +95,7 @@ CREATE TABLE `peliculas` (
   `cantidad` int(11) NOT NULL,
   PRIMARY KEY (`idPelicula`),
   UNIQUE KEY `uqTitulo` (`titulo`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +136,7 @@ CREATE TABLE `prestamos` (
 
 LOCK TABLES `prestamos` WRITE;
 /*!40000 ALTER TABLE `prestamos` DISABLE KEYS */;
-INSERT INTO `prestamos` VALUES (1,15,1,'2016-03-06','2016-03-14',1),(2,15,1,'2016-03-06','2016-03-14',1),(3,16,1,'2016-03-06','2016-03-14',1),(4,16,1,'2016-03-06','2016-03-14',1),(5,15,1,'2016-03-06','2016-03-14',1),(6,15,1,'2016-03-06','2016-03-14',0),(7,18,2,'2016-03-06','2016-03-14',0);
+INSERT INTO `prestamos` VALUES (1,15,1,'2016-02-26','2016-03-04',0),(2,15,1,'2016-03-06','2016-03-14',0),(3,16,1,'2016-03-06','2016-03-14',0),(4,16,1,'2016-03-06','2016-03-14',0),(5,15,1,'2016-03-06','2016-03-14',0),(6,15,1,'2016-03-06','2016-03-14',0),(7,18,2,'2016-03-06','2016-03-14',0);
 /*!40000 ALTER TABLE `prestamos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -600,13 +600,13 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`emilio`@`%` PROCEDURE `getPeliculasEnMora`()
 BEGIN
 	SELECT * FROM peliculas
     INNER JOIN prestamos ON peliculas.idPelicula = prestamos.idPelicula
-    WHERE prestamos.devolucion < CURDATE()
+    WHERE prestamos.devolucion < CURDATE() AND prestamos.devuelta = 0
     GROUP BY peliculas.titulo;
 END ;;
 DELIMITER ;
@@ -882,4 +882,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-06 20:19:57
+-- Dump completed on 2016-03-06 20:33:37
