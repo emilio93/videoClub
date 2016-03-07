@@ -124,7 +124,7 @@ public class EjecutorPrestamos extends HttpServlet {
                     prestamo = new Prestamo(c, p);
                     exito = pbd.agregar(prestamo);
                     json = "{"
-                            + "\"success\": \"" + exito + "\", "
+                            + "\"success\": \"" + Boolean.toString(exito) + "\", "
                             + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
                             + "}";
                     break;
@@ -132,7 +132,7 @@ public class EjecutorPrestamos extends HttpServlet {
                     id = Integer.parseInt(request.getParameter("id"));
                     exito = pbd.finalizarPrestamo(id);
                     json = "{"
-                            + "\"success\": \"" + exito + "\", "
+                            + "\"success\": \"" + Boolean.toString(exito) + "\", "
                             + "\"error\": \"" + StringEscapeUtils.escapeJson(pbd.getError()) + "\""
                             + "}";
                     break;

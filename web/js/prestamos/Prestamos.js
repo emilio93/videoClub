@@ -16,10 +16,6 @@ $(document).ready( function() {
     });
     $('#form-agregar').submit( function() {
         httpAgregar.agregar();
-        if (toggleListar.estado && httpAgregar.status) {
-            $('#activador-listar').click();
-            $('#activador-listar').click();
-        }
     });
 
     $('#prestamos-listado-todos').click( function() {

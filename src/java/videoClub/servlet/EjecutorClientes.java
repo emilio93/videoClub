@@ -110,7 +110,7 @@ public class EjecutorClientes extends HttpServlet {
 
                 exito = cbd.agregar(cliente);
                 json = "{" + 
-                        "\"success\": \"" + exito + "\", " + 
+                        "\"success\": \"" + Boolean.toString(exito) + "\", " + 
                         "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\"" + 
                         "}";
                 break;
@@ -127,7 +127,7 @@ public class EjecutorClientes extends HttpServlet {
                 );
                 exito = cbd.actualizar(cliente);
                 json = "{"
-                        + "\"success\": \"" + exito + "\", "
+                        + "\"success\": \"" + Boolean.toString(exito) + "\", "
                         + "\"error\": \"" + StringEscapeUtils.escapeJson(cbd.getError()) + "\""
                         + "}";
                 break;

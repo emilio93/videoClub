@@ -18,10 +18,6 @@ $(document).ready( function() {
     });
     $('#form-agregar').submit( function() {
         httpAgregar.agregar();
-        if (toggleListar.estado && httpAgregar.status) {
-            $('#activador-listar').click();
-            $('#activador-listar').click();
-        }
     });
 
     $('#peliculas-listado-todas').click( function() {
