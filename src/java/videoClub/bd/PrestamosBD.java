@@ -57,12 +57,7 @@ public class PrestamosBD extends Consultor{
             stmt.setInt(2, prestamo.getPelicula().getIdPelicula());
             stmt.setString(3, prestamo.getSalida().toString());
             stmt.setString(4, prestamo.getDevolucion().toString());
-            
-            stmt.executeUpdate();
-            ResultSet keys = stmt.getGeneratedKeys();
-            if (keys != null && keys.next()) {
-                exito = true;
-            }
+
             exito = stmt.executeUpdate() == 1;
             if (!exito) setError( getError() + "No se pudo agregar el préstamo.");
             inf.log("Agregando préstamo a la base de datos: " + Boolean.toString(exito));
